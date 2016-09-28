@@ -1,0 +1,82 @@
+Organization Chart[role as the basic element] also with the line,be careful a Trash as the temp remove ,also can be revert or drag back
+data structure shall be like tree,can also be json children, a role 有从属，汇总，虚拟节点多对多三种关系（1对多， 多对一，多对多）
+
+工作流模块，role and event(action),event contains 1,all,大多数的通过方式，然后工作流有申请（审批）和下发通知两种流程
+
+so drag drop have three types role，action【关联文件，comments,大的可以看到小的上传的文件comment，小的看不到大的，level + 工作流id ,获取时 level> ...，工作流拒绝时，有一个返回某个event部分的操作，此时拒绝的内容作为工作流关联role id，该内容为拒绝后指定的action关联的角色可见】，virtual node(for关联上下组织结构)
+使用localstorage做暂存
+then others...
+
+D3 drag
+
+角色， 圆形
+职位，一个职位可以有多个角色，一个角色可以指定多个职位，来处理相应的行为 职位圆角矩形
+行为，菱形
+主要是模板，模板有一个描述，后续的工作流操作，还是需要表单来完成
+
+1. 行为不能行为拖放在一起
+2. 角色，职位不能再工作流中拖放在一起
+3. 行为只能和角色以及职位拖放在一起
+4.一个行为既可以有多个上行的处理人，也可以有多个下行的处理人，每个下行的处理人又可以有不同的行为
+5. 行为的特性可以有描述，权重（多人，单人，全部决定），驳回权权重（多人，单人，全部决定），【单一文件（zip或其他），app中考虑音频，注解，这种是实例中包含的】，parents， children，parents对行为具有描述权，children对行为具有查看，反驳权（根据工作流行为（权重在children部分））
+6. 职位，角色中包含名称，点击后职位会有其可用角色，角色点击后会有其包含职位
+7. 工作流和工作流模板是两个概念，工作流目前有两种类型（下发和申请，自有其权重）
+8. 组织结构图，主要是组织结构相关
+9. 使用tab来进行3个分类的考量（组织结构图，下发，申请）
+
+技术性：
+
+圆形，菱形，圆角矩形，箭头，拖拽基点，拖拽以及点击时的modal显示并处理，排列的合理性分布
+
+基本框架搭建完成，目前是形状的绘制以及label的居中，然后考虑将图形和label整合为一个组，并保证其可以整体拖拽，然后，考虑工作区的整体结构和触发事件
+
+使用g 将同时拖拽文字和图形进行处理，另外拖拽end 失败的回退以及modal的显示
+拖拽成功的data处理，注意此处的data绑定以及data回传，刷新
+
+拖拽入口框
+拖拽回放
+垃圾回收框
+
+数据结构明确
+
+所有使用localstorage来实现暂存，直到进行save的时候
+
+首先将基础性的技术性问题解决，然后进行业务性的判定处理
+sample group用于收集sample data，并根据行为进行处理，应该设计为一个对象，有行为，有属性，有值
+
+拖拽以及判定
+首先判断有无子元素，没有，弹出属性设定框，单独行为的话弹出不可设定，加入，弹出框的设计需要考虑
+因为涉及到修改，所以要判定data的初始值，然后向data加入，加入后，同步到storage，需要根据传入的id来设计，在右下侧底部要加入一个save的操作，用于和后台数据库同步
+，当触发完成后，需要设计流程action，并将其扩散到每个自行设计的类里面，这样就实现了数据和操作的分离，data改变后的重绘放置在componentDidUpdate里面
+首先是最基本的modal显示，添加修改操作的完成，然后再将其借入到data里面和action结合，一步一步来
+
+1.添加透明蒙版层
+2.去除动作
+
+
+将整个流程串起来，同时将向内部传递的部分进行合适的处理，form需要一个单独change的触发action的回调，先将最基本的清空处理做一下
+
+这里不做工作流的记录的删除，我们放置在table或者list里面做
+
+在save的时候，判断是否已有flowId，没有的话，给出modal的name form 输入框，并用action，在callback的时候获取，并进行存储，如果已有flowId，直接保存
+这里仍然需要middleware部分的除去URL的endpoint之外的fun action的处理
+
+首先，目前架构走通，测试部分功能，比如清空工作板，然后拖拽的form部分走通，涉及到endpoint为function的情况，然后就是整天的保存处理，然后就是细节样式以及整个panel的title更新为工作流的name的处理
+
+1. modal  消失后不见
+2. 样式设计
+3. form action
+4. 调整form内容
+action-->index.js部分，即将转移至basicElement-->commonElement.js的编码实现
+    //注意此处的数据结构要和传输的data保持一致性，所以要在commonElement部分进行data结构的解析和完善，分为多种，注意toplevel的情况处理，
+    // 是否尝试在modalheadr部分加入声明title？，比如您正在添加一个角色，您正在修改一个角色，您正在将角色添加在顶部等等！！！
+
+下午将验证完成，然后更新form，然后完成，然后单个元素的删除？？此处如何执行删除操作？，然后整体的save和删除
+
+目前更新出现问题，parentId生成时的number和string不一致的问题
+
+下行和上行设置为空的情况处理！！！被遗漏，以及考虑对行为设置多个上行角色时，将角色的下行行为的处理，比如角色已有行为的情况
+
+删除元素
+
+now：drag 部分需要考虑组织结构部分的实现，主要是塔状，顶层只允许一个，然后拖拽时，考虑position 可以拖拽至position，关联parent child时，考虑类似action的，一个下属只能有一个上级！！

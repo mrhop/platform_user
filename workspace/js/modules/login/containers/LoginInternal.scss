@@ -1,0 +1,62 @@
+@import "../../../../scss/import";
+
+html#auth, html#auth body, .auth-main {
+
+  height: 100%;
+  position: relative;
+}
+
+.auth-main {
+  margin: auto;
+  width: 100%;
+  @include display-flex(flex);
+  @include align-items(center);
+}
+
+.auth-block {
+  width: 540px;
+  margin: 0 auto;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  padding: 32px;
+}
+
+.auth-block h1 {
+  font-weight: normal;
+  margin-bottom: 28px;
+}
+
+.auth-block h1 {
+  text-align: center;
+}
+
+.auth-link {
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  font-size: 16px;
+  margin-bottom: 33px;
+}
+
+.form-group label {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.form-control {
+  border: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+a.forgot-pass {
+  display: block;
+  text-align: right;
+  margin-bottom: -20px;
+  float: right;
+  z-index: 2;
+  position: relative;
+}

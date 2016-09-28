@@ -1,0 +1,107 @@
+@import "../../../../scss/import";
+
+#toast-container {
+  position: fixed;
+  z-index: 999999
+}
+
+#toast-container.right-top {
+  top: 12px;
+  right: 12px;
+}
+
+#toast-container .toast {
+  position: relative;
+  @include transition(all 0.3s ease);
+  display: none;
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 15px 15px 15px 50px;
+  width: 400px;
+  @media (max-width: $screen-xs-min - 1) {
+    width: 300px;
+  }
+  font-size: 14px;
+  @include border-radius(3px);
+  @include box-shadow(0 0 12px #999);
+  color: #FFF;
+  background-color: $brand-primary;
+  opacity: 1;
+  &.open {
+    @include animation-fill-mode(both);
+    @include animation(toast-show 300ms linear);
+  }
+  &.close{
+    @include animation-fill-mode(both);
+    @include animation(toast-hide 300ms linear);
+  }
+  &:hover {
+    @include box-shadow(0 0 12px #fff);
+  }
+  &.toast-success {
+    background-color: $brand-success;
+    .left-icon{
+      i:before{
+        content: "\e90e";
+      }
+    }
+  }
+  &.toast-warning {
+    background-color: $brand-warning;
+    .left-icon{
+      i:before{
+        content: "\e90c";
+      }
+    }
+  }
+  &.toast-error {
+    background-color: $brand-danger;
+    .left-icon{
+      i:before{
+        content: "\e90f";
+      }
+    }
+  }
+  .toast-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .left-icon{
+    position: absolute;
+    left: 10px;
+    top:50%;
+    i{
+      display: block;
+      line-height: 30px;
+      font-size: 30px;
+      margin-top: -15px;
+      &:before{
+        content: "\e90d";
+      }
+    }
+  }
+
+  .close {
+    margin-top: -5px;
+    padding: 0;
+    cursor: pointer;
+    color: #fff;
+    background: 0 0;
+    border: 0;
+    outline: 0 !important;
+    opacity: 1;
+    float: right;
+    font-size: 21px;
+    line-height: 1;
+    text-shadow: 0 1px 0 #fff;
+    font-weight: 700;
+    &:hover{
+      color: $gray;
+      text-shadow: 0 1px 0 $gray;
+    }
+    &:before{
+      content: '\e90b';
+    }
+  }
+}
+//after close,delete? and click create,not create before

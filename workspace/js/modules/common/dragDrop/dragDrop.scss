@@ -1,0 +1,80 @@
+@import "../../../../scss/import";
+
+.dragdrop-wrapper {
+  height: 300px;
+  .sample-base-react, .work-base-react {
+    stroke: none;
+    fill: #fff;
+    filter: url(#drop-shadow);
+    pointer-events: all;
+  }
+  .trash-base-text {
+    font-family: "Icomoon Icon";
+    font-size: 25px;
+    fill: #fff;
+    pointer-events: all;
+    cursor: pointer;
+    filter: url(#drop-shadow);
+    alignment-baseline: middle;
+    text-anchor: middle;
+    &:hover {
+      fill: $brand-primary;
+    }
+  }
+  .common-element {
+    fill: none;
+    stroke-width: 3;
+    cursor: pointer;
+    pointer-events: all;
+  }
+  circle.common-element {
+    stroke: $brand-primary;
+    &:hover {
+      stroke: darken($brand-primary, 10%);
+    }
+  }
+  ellipse.common-element {
+    stroke: $brand-primary;
+    &:hover {
+      stroke: darken($brand-primary, 10%);
+    }
+  }
+  rect.common-element {
+    stroke: $brand-warning;
+    &:hover {
+      stroke: darken($brand-warning, 10%);
+    }
+  }
+  polygon.common-element {
+    stroke: $brand-danger;
+    &:hover {
+      stroke: darken($brand-danger, 10%);
+    }
+  }
+  text.innner-text {
+    @include user-select(none);
+    alignment-baseline: middle;
+    text-anchor: middle;
+    cursor: pointer;
+    pointer-events: all;
+  }
+  text.circle-text {
+    fill: $brand-primary;
+  }
+  text.rect-text {
+    fill: darken($brand-warning, 10%);
+  }
+  text.ellipse-text {
+    fill: darken($brand-primary, 10%);
+  }
+  text.polygon-text, text.diamond-text {
+    fill: darken($brand-danger, 10%);
+  }
+  .line-work-group {
+    stroke: $gray;
+    stroke-width: 2;
+    marker-end: url(#arrow-marker);
+    marker-end: url(#arrow-marker);
+  }
+}
+

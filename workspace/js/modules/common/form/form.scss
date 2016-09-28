@@ -1,0 +1,359 @@
+@import "../../../../scss/import";
+
+.defaultForm, .noLabelForm, .horizontalForm, .inlineForm, .blockForm {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  .form-group {
+    .form-control {
+      border-width: 0px;
+      &:focus {
+        border-width: 1px;
+      }
+      @include placeholder(#ccc);
+      &.textarea {
+        resize: none;
+        &::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          background-color: rgba(0, 0, 0, 0.4);
+        }
+        &::-webkit-scrollbar {
+          width: 4px;
+          background-color: transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          background-color: rgba(255, 255, 255, 0.7);;
+        }
+      }
+    }
+    &.has-error .form-control {
+      border: 1px solid $brand-danger;
+    }
+  }
+  .checkbox-wrapper {
+    margin-bottom: 15px;
+    ul.checkbox {
+      margin-bottom: 0;
+      margin-top: 0;
+      border-radius: 5px;
+      padding: 7px;
+      padding-left: 0;
+      background: rgba(0, 0, 0, 0.4);
+      li {
+        display: inline-block;
+        padding-left: 20px;
+        input[type='checkbox'] {
+          margin-left: -15px;
+        }
+        label {
+          padding-left: 0;
+          padding-right: 3px;
+        }
+      }
+    }
+    &.has-error ul.checkbox {
+      border: 1px solid $brand-danger;
+      color: #fff;
+    }
+  }
+  .radio-wrapper {
+    margin-bottom: 15px;
+    ul.radio {
+      margin-bottom: 0;
+      margin-top: 0;
+      border-radius: 5px;
+      padding: 7px;
+      padding-left: 0;
+      background: rgba(0, 0, 0, 0.4);
+      li {
+        display: inline-block;
+        padding-left: 20px;
+        input[type='radio'] {
+          margin-left: -15px;
+        }
+        label {
+          padding-left: 0;
+          padding-right: 3px;
+        }
+      }
+
+    }
+    &.has-error ul.radio {
+      border: 1px solid $brand-danger;
+      color: #fff;
+    }
+  }
+  .select-wrapper {
+    margin-bottom: 15px;
+    .Select-control {
+      border: none;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      @include transition(border-color ease-in-out 0.15s);
+      @include transition(box-shadow ease-in-out 0.15s);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      //&:focus{
+      //  border: 1px solid $input-border-focus;
+      //  @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6));
+      //}
+      .Select-value-label, .Select-placeholder {
+        color: #fff !important;
+      }
+      .Select-clear-zone {
+        color: #fff;
+        &:hover {
+          color: $brand-danger;
+        }
+      }
+      .Select-arrow {
+        border-color: #fff transparent transparent !important;
+      }
+    }
+    &.has-error .Select-control {
+      border: 1px solid $brand-danger;
+      //@include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(red($brand-danger), green($brand-danger), blue($brand-danger), .6));
+    }
+  }
+  .datetime-wrapper {
+    margin-bottom: 15px;
+    width: 100%;
+    div.date > div, div.daterange-wrapper {
+      width: 100%;
+      input {
+        width: 100%;
+        outline: none;
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+        height: 34px;
+        padding: 0 12px;
+        background: rgba(0, 0, 0, 0.4);
+        @include transition(border-color ease-in-out 0.15s);
+        @include transition(box-shadow ease-in-out 0.15s);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        @include placeholder(#ccc);
+        &:focus {
+          border: 1px solid $input-border-focus;
+          @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6));
+        }
+      }
+    }
+
+    div.date {
+      input {
+      }
+    }
+    div.daterange-wrapper {
+      > span {
+        margin: 0 5px;
+      }
+      div.daterange {
+        display: inline-block;
+        width: 45%;
+        > div {
+          width: 100%;
+        }
+      }
+    }
+    &.has-error div.date ,&.has-error div.daterange.has-error{
+      input {
+        border: 1px solid $brand-danger;
+        @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(red($brand-danger), green($brand-danger), blue($brand-danger), .6));
+      }
+    }
+  }
+  .form-group, .checkbox-wrapper, .radio-wrapper, .select-wrapper, .datetime-wrapper {
+    .error-block {
+      color: $brand-danger;
+    }
+  }
+
+  div.action {
+    div.submit {
+      float: left;
+      margin-right: 10px;
+    }
+    div.reset {
+      float: left;
+    }
+  }
+}
+
+.defaultForm, .horizontalForm, .blockForm {
+  label span.required {
+    color: $brand-danger;
+    margin-left: 3px;
+    vertical-align: middle;
+  }
+}
+.defaultForm, .horizontalForm,.noLabelForm{
+  .action {
+    .actions{
+      float: right;
+      button{
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.horizontalForm {
+  .form-group, .checkbox-wrapper, .radio-wrapper, .select-wrapper, .datetime-wrapper {
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    margin-bottom: 15px;
+    > label {
+      @media (min-width: $screen-sm-min) {
+        line-height: 34px;
+        margin-bottom: 0px;
+        vertical-align: middle;
+        text-align: right;
+      }
+    }
+    .col-sm-10, .col-sm-2 {
+      @media (max-width: $screen-xs-max) {
+        padding: 0
+      }
+    }
+    .error-block {
+      @media (min-width: $screen-sm-min) {
+        float: right;
+      }
+    }
+  }
+  .checkbox-wrapper {
+    @media (min-width: $screen-sm-min) {
+      ul.checkbox {
+        margin-top: 8px;
+      }
+    }
+  }
+  .radio-wrapper {
+    @media (min-width: $screen-sm-min) {
+      ul.radio {
+        margin-top: 8px;
+      }
+    }
+  }
+  .action {
+    padding-left: 0px;
+    padding-right: 0px;
+    @media (min-width: $screen-sm-min) {
+      float: right;
+      padding: 0;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}
+
+.noLabelForm, .inlineForm {
+  .form-group, .checkbox-wrapper, .radio-wrapper, .select-wrapper, .datetime-wrapper {
+    > label {
+      display: none;
+    }
+  }
+}
+
+.inlineForm {
+  @media (min-width: $screen-sm-min) {
+    .form-group, .checkbox-wrapper, .radio-wrapper, .select-wrapper, .datetime-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+      input {
+        width: auto;
+      }
+      .error-block {
+        position: absolute;
+        font-size: 12px;
+      }
+    }
+    .form-group {
+      .textarea-first-wrapper {
+        display: inline-block;
+        height: 22px;
+        .form-control.textarea {
+          min-width: 200px;
+          line-height: 22px;
+        }
+      }
+    }
+    .datetime-wrapper {
+      width: auto;
+      div.daterange {
+        width: auto;
+        > div {
+          width: auto;
+        }
+      }
+    }
+    .select-wrapper {
+      .select-first-wrapper {
+        height: 34px;
+        .select-second-wrapper {
+          height: 22px;
+          display: inline-block;
+        }
+      }
+    }
+    div.action {
+      display: inline-block;
+      width: auto;
+      display: inline-block;
+      div.submit, div.reset {
+        display: inline-block;
+        float: none;
+      }
+      div.actions{
+        display: inline-block;
+
+      }
+    }
+  }
+  div.action {
+    div.actions{
+      button{
+        margin-left: 10px;
+      }
+
+    }
+  }
+}
+
+.blockForm {
+  .col {
+    padding-left: 0;
+    .form-group {
+      position: relative;
+      .error-block {
+        position: absolute;
+      }
+      @media (min-width: $screen-sm-min) {
+        .form-control.textarea {
+          line-height: 22px;
+        }
+      }
+    }
+  }
+  .action {
+    margin-left: -10px;
+    @media (min-width: $screen-sm-min) {
+      float: left;
+      width: 100%;
+      margin-right: -10px;
+    }
+    .actions{
+      float: right;
+      button{
+        margin-left: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,293 @@
+@import "../../../../scss/import";
+
+.table-root {
+  .table-content {
+    .table {
+      margin-bottom: 0;
+      thead {
+        tr {
+          th {
+            white-space: nowrap;
+            border-bottom: none;
+            font-weight: normal;
+            &.sortAvailable {
+              cursor: pointer;
+            }
+            span.th-sort {
+              display: inline-block;
+              margin-left: 5px;
+              @include transition(all 200ms linear);
+              &:before {
+                content: '\e903';
+              }
+              &.asc {
+                @include rotate(180deg);
+              }
+              &.desc {
+                @include rotate(0deg);
+              }
+            }
+
+          }
+
+          &.theadFilter {
+            th {
+              background-color: rgba(0, 0, 0, 0.2);
+            }
+          }
+          &.theadRowAdd {
+            display: none;
+            th {
+              background-color: rgba(0, 0, 0, 0.3);
+            }
+          }
+          &.theadFilter, &.theadRowAdd {
+            th {
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
+            input.editable {
+              background-color: rgba(0, 0, 0, .5);
+              height: 25px;
+              border-color: rgba(0, 0, 0, .1);
+              padding: 6px 3px;
+            }
+          }
+        }
+      }
+      tbody {
+        tr {
+          border-bottom: none;
+          td {
+            padding: 4px 8px;
+            line-height: 25px;
+            vertical-align: middle;
+            border-top: none;
+            &.td-row-actions {
+              div.btn-group {
+                width: 120px;
+                &.edited {
+                  display: block;
+                }
+                &.editing {
+                  display: none;
+                }
+              }
+            }
+            .td-value {
+              display: inline-block;
+              &.column-edit {
+                text-decoration: underline;
+              }
+            }
+            .editable {
+              display: none;
+            }
+          }
+          &.edit {
+            td {
+              .td-value {
+                display: none;
+              }
+              .editable {
+                display: block;
+                &.column-editable {
+                  display: none;
+                }
+              }
+              &.td-row-actions {
+                div.btn-group {
+                  &.edited {
+                    display: none;
+                  }
+                  &.editing {
+                    display: block;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      tfoot {
+        tr {
+          td {
+            border-top: none;
+          }
+        }
+      }
+      &.hover {
+        thead {
+          tr {
+            background-color: rgba(0, 0, 0, .1);
+          }
+        }
+        tbody {
+          tr {
+            td {
+              border-top: 1px solid rgba(255, 255, 255, .2);
+            }
+            &:first-child {
+              td {
+                border-top: none;
+              }
+            }
+            &:hover {
+              background-color: rgba(0, 0, 0, .1);
+            }
+          }
+        }
+        tfoot {
+          tr {
+            background-color: rgba(0, 0, 0, .1);
+          }
+        }
+      }
+
+      &.border {
+        thead {
+          tr {
+            th {
+              border: 1px solid rgba(255, 255, 255, .2) !important;
+            }
+          }
+        }
+        tbody, tfoot {
+          tr {
+            td {
+              border: 1px solid rgba(255, 255, 255, .2) !important;
+            }
+          }
+        }
+      }
+      &.condensed {
+        thead {
+          tr {
+            th {
+              border-bottom: 1px solid rgba(255, 255, 255, .2) !important;
+            }
+          }
+        }
+        tbody, tfoot {
+          tr {
+            td {
+              border-bottom: 1px solid rgba(255, 255, 255, .2) !important;
+            }
+          }
+        }
+      }
+      &.striped {
+        tbody {
+          tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, .1);
+          }
+        }
+      }
+      .td-id {
+        text-align: left !important;
+        width: 40px;
+      }
+      .tr-deep {
+        background-color: rgba(0, 0, 0, .1);
+      }
+      td, th {
+        .editable {
+          line-height: 25px;
+          display: block;
+          &.Select {
+            width: 100%;
+          }
+          &.input-text {
+            border: 1px solid $input-border;
+            border-radius: $input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
+            @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075));
+            @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+            @include form-control-focus;
+            color: #000;
+            padding: 0px 3px;
+            width: 100%;
+          }
+          &.ul-wrapper {
+            margin-bottom: 0;
+            padding-left: 0px;
+            li {
+              display: inline-block;
+              padding-right: 5px;
+              input {
+                margin-right: 2px;
+              }
+            }
+          }
+          label {
+            font-weight: normal;
+          }
+        }
+        .column-editable {
+          display: none;
+        }
+        &.td-editable {
+          position: relative;
+          cursor: pointer;
+          .column-editable {
+            &.btn-group {
+              position: absolute;
+              right: 0;
+              top: 8px;
+            }
+          }
+          .btn-group {
+            .save {
+              i:before {
+                content: "\e90e";
+              }
+            }
+            .cancel {
+              i:before {
+                content: "\e90b";
+              }
+            }
+          }
+          &.open {
+            .td-value {
+              display: none;
+            }
+            .editable {
+              display: none;
+              &.column-editable {
+                display: block;
+                width: auto;
+                margin-right: 40px;
+              }
+            }
+            .column-editable.btn-group {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+  .top-operations {
+    margin-bottom: 5px;
+    //overflow: hidden;
+    .btn-add-row {
+      float: right;
+    }
+    .select-row-size {
+      float: left;
+      width: 200px;
+    }
+  }
+
+  .bottom-operations {
+    margin-top: 5px;
+    .btn-pager {
+      .btn {
+        color: #000;
+        &:hover, &.active {
+          background-color: #aaa;
+        }
+      }
+    }
+  }
+}

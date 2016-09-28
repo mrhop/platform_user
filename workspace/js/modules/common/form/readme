@@ -1,0 +1,15 @@
+1.basic elements
+2.wrapper 横向 纵向，没有label
+3.单form，step form[采用callback]，手动关联
+4.使用json映射table，action，return 等等
+5.校验分前台和后台
+6.action仍然使用redux的action。使用props传递的方式
+
+
+现在是validate的设计部分，然后是服务端validate部分，然后是success的callback部分，然后是step form设计部分，然后做出index的demo部分，
+目前layout部分完成，需要基本元素的样式处理，然后是加入一个date-time的基本元素
+1.自适应的daterange
+2.data的格式化保存
+3.不同layoutform的不同daterange
+done
+然后就是dragDrop和map

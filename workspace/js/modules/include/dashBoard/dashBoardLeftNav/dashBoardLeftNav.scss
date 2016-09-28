@@ -1,0 +1,177 @@
+@import "../../../../../scss/import";
+
+.al-sidebar {
+  width: 180px;
+  top: 66px;
+  left: 0;
+  z-index: 904;
+  display: block;
+  min-height: 500px;
+  background: rgba(0, 0, 0, .5);
+  height: 100%;
+  position: fixed;
+  @media (max-width: $screen-lg-min - 1) {
+    width: 52px;
+  }
+  @media (max-width: $screen-xs-min - 1) {
+    width: 0px;
+  }
+  &.collapse {
+    width: 52px !important;
+    @media (max-width: $screen-xs-min - 1) {
+      width: 0px !important;
+    }
+    .al-sidebar-list b {
+      @include opacity(0);
+    }
+    .al-sidebar-sublist {
+      position: absolute;
+      width: 0;
+      overflow: hidden;
+      left: 52px;
+      top: -1px;
+    }
+  }
+  &.un-collapse {
+    width: 180px !important;
+    .al-sidebar-list b {
+      @include opacity(1);
+    }
+    .al-sidebar-sublist {
+      position: static;
+      width: auto;
+    }
+  }
+  @include transition(all 200ms linear);
+}
+
+.al-sidebar .direct-line {
+  position: absolute;
+  width: 3px;
+  right: 0px;
+  top: -200px;
+  height: 43px;
+  background-color: darken($brand-primary, 10%);
+  @include transition(all 200ms ease-in-out);
+}
+
+.al-sidebar-list, .al-sidebar-sublist {
+  margin: 0;
+  padding: 18px 0 0;
+  list-style: none;
+}
+
+.al-sidebar-list {
+  font-size: 14px;
+}
+
+.al-sidebar-list li {
+  display: block;
+  position: relative;
+  float: none;
+  padding: 0;
+}
+
+.al-sidebar-list li.selected {
+  background-color: darken($brand-primary, 10%);
+}
+
+.al-sidebar-list a {
+  color: #fff;
+  display: block;
+  padding-left: 18px;
+  line-height: 42px;
+  cursor: pointer;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.al-sidebar-list li:not(.selected) a:hover, .al-sidebar-list li:not(.selected) a:active {
+  color: $brand-primary;
+  b {
+    color: $brand-primary;
+  }
+}
+
+.al-sidebar-list li.selected a:hover, .al-sidebar-list li.selected a:active {
+  color: #fff;
+  b {
+    color: #fff;
+  }
+}
+
+.al-sidebar-list i {
+  margin-right: 18px;
+  width: 16px;
+  display: inline-block;
+  font-family: "Icomoon Icon";
+  font-style: normal;
+}
+
+.al-sidebar-list i.home:before {
+  content: '\e900';
+}
+
+.al-sidebar-list i.cog:before {
+  content: '\e901';
+}
+
+.al-sidebar-list b {
+  display: block;
+  line-height: 16px;
+  text-shadow: none;
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  padding: 0;
+  text-align: center;
+  color: #ccc;
+  font-weight: normal;
+  font-family: "Icomoon Icon";
+  @include opacity(1);
+  @media (max-width: $screen-lg-min - 1) {
+    @include opacity(0);
+  }
+}
+
+.al-sidebar-list b.down:before {
+  content: '\e903';
+}
+
+.al-sidebar-list b.up:before {
+  content: '\e906';
+}
+
+.al-sidebar-sublist {
+  font-size: 13px;
+  padding-top: 0;
+  height: 0px;
+  overflow: hidden;
+  @include transition(all 200ms linear);
+  @media (max-width: $screen-lg-min - 1) {
+    position: absolute;
+    width: 0;
+    overflow: hidden;
+    left: 52px;
+    top: -1px;
+  }
+}
+
+.al-sidebar-list-item .down {
+  @include transition(all 200ms linear);
+  @include rotate(0deg);
+}
+
+.al-sidebar-list-item.opened .al-sidebar-sublist {
+  height: auto;
+}
+
+.al-sidebar-list-item.opened .down {
+  @include rotate(180deg);
+}
+
+.al-sidebar-sublist a {
+  padding-left: 52px;
+  line-height: 29px;
+}
