@@ -106,15 +106,32 @@
   display: inline-block;
   font-family: "Icomoon Icon";
   font-style: normal;
+  &.home:before{
+    content: '\e900';
+  }
+  &.cog:before{
+    content: '\e901';
+  }
+  &.users:before{
+    content: '\e915';
+  }
+  &.user:before{
+    content: '\e916';
+  }
+  &.lock:before{
+    content: '\e914';
+  }
+  &.app:before{
+    content: '\e917';
+  }
+  &.module:before{
+    content: '\e918';
+  }
+  &.control:before{
+    content: '\e919';
+  }
 }
 
-.al-sidebar-list i.home:before {
-  content: '\e900';
-}
-
-.al-sidebar-list i.cog:before {
-  content: '\e901';
-}
 
 .al-sidebar-list b {
   display: block;

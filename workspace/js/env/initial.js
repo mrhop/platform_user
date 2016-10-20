@@ -30,5 +30,10 @@ module.exports = {
     //locale:'en-US'
     //locale:'zh-CN'
     locale: localeLanguage,
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    endpoints: {
+        gettokenbypassword: 'gettokenbypassword',
+        gettokenbyclient: 'gettokenbyclient',
+        dashboardleftmenu:'leftmenu'
+    }
 }

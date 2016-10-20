@@ -14,7 +14,7 @@ class ErrorPage404 extends React.Component {
             <div>
                 <h1><ReactIntl.FormattedMessage id='404.error'/></h1>
 
-                <p><ReactIntl.FormattedMessage id='404.sorrySentence'/><a href='/'><ReactIntl.FormattedMessage
+                <p><ReactIntl.FormattedMessage id='404.sorrySentence'/><a href={baseUrl}><ReactIntl.FormattedMessage
                     id='404.backHome'/></a></p>
             </div>
         );

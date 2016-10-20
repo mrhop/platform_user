@@ -11,7 +11,7 @@ function getLeftMenu(requestCondition) {
         [MiddleWare.CALL_API]: {
             httpType: 'get',
             types: [DASHBOARD_FRAMEWORK_LEFTMENU_REQUEST, DASHBOARD_FRAMEWORK_LEFTMENU_SUCCESS, DASHBOARD_FRAMEWORK_LEFTMENU_FAILURE],
-            endpoint: `demoData/dashboardFramework/leftmenu.json`,
+            endpoint: endpoints.dashboardleftmenu,
         },
         requestCondition
     }

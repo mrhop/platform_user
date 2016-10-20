@@ -29,7 +29,7 @@ class DashboardLeft extends React.Component {
                     <div className="direct-line"></div>
                     <CustomScrollbar style={{'heigh':'100%'}}>
                         { this.props.leftMenu.data &&
-                        <DashboardLeftList {...this.props} data={this.props.leftMenu.data}/>}
+                        <DashboardLeftList data={this.props.leftMenu.data.responseData.data.content} {...this.props} />}
                     </CustomScrollbar>
                 </aside>
             </sidebar>
@@ -91,17 +91,17 @@ class DashboardLeftList extends React.Component {
             var liClass = classNames('al-sidebar-list-item', {'selected': item.url && item.url === this.props.leftMenu.selectedUrl ? 'selected' : null});
             //var liClass = classNames('al-sidebar-list-item', {'selected': item.selected});
             return (
-                <li key={item.id} className={liClass} data-url={item.url}
-                    onClick={this.onClick.bind(this)}>
-                    <ReactRouter.Link className={"al-sidebar-list-link"} to={ item.url ? item.url : '#'}
+                item.available && (<li key={item.internalId} className={liClass} data-url={item.moduleUrl}
+                                       onClick={this.onClick.bind(this)}>
+                    <ReactRouter.Link className={"al-sidebar-list-link"} to={ item.moduleUrl ? item.moduleUrl : '#'}
                                       onMouseOver={this.onMouseOver}
-                                      onClick={!item.url ? e => e.preventDefault() : null}>
+                                      onClick={!item.moduleUrl ? e => e.preventDefault() : null}>
                         <i className={item.iconClass}></i>
-                        <span>{item.name}</span>
-                        {item.subItems ? (<b className="down"></b>) : null}
+                        <span>{item.moduleName}</span>
+                        {item.children ? (<b className="down"></b>) : null}
                     </ReactRouter.Link>
-                    {item.subItems ? (<DashboardLeftSubList {...this.props} data={item.subItems}/>) : null}
-                </li>
+                    {item.children ? (<DashboardLeftSubList {...this.props} data={item.children}/>) : null}
+                </li>)
             );
         }, this);
 
@@ -138,14 +138,15 @@ class DashboardLeftSubList extends React.Component {
     render() {
         var classNames = require('classnames');
         var subItems = this.props.data.map(function (subItem) {
-            var liClass = classNames('al-sidebar-sublist-item', {'selected': subItem.url && subItem.url === this.props.leftMenu.selectedUrl ? 'selected' : null});
+            var liClass = classNames('al-sidebar-sublist-item', {'selected': subItem.moduleUrl && subItem.moduleUrl === this.props.leftMenu.selectedUrl ? 'selected' : null});
             return (
-                <li key={subItem.id} data-url={subItem.url} className={liClass} onClick={this.onClick.bind(this)}
-                    onMouseOver={this.onMouseOver}>
-                    <ReactRouter.Link className={"al-sidebar-list-link"} to={subItem.url}>
-                        <span>{subItem.name}</span>
+                subItem.available && (<li key={subItem.internalId} data-url={subItem.moduleUrl} className={liClass}
+                                          onClick={this.onClick.bind(this)}
+                                          onMouseOver={this.onMouseOver}>
+                    <ReactRouter.Link className={"al-sidebar-list-link"} to={subItem.moduleUrl}>
+                        <span>{subItem.moduleName}</span>
                     </ReactRouter.Link>
-                </li>
+                </li>)
             );
         }, this);
         return (<ul className="al-sidebar-sublist">{subItems}</ul>);

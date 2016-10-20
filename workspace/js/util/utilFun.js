@@ -9,6 +9,7 @@ let utilFun = function () {
     global.locale = intl[locale] ? locale : initial.locale;
     global.globalProps = intl[global.locale]['app'];
     global.baseUrl = initial.baseUrl;
+    global.endpoints = initial.endpoints;
 };
 utilFun.prototype = {
     name: 'utilFun',
