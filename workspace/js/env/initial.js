@@ -34,6 +34,7 @@ module.exports = {
     endpoints: {
         gettokenbypassword: 'gettokenbypassword',
         gettokenbyclient: 'gettokenbyclient',
-        dashboardleftmenu:'leftmenu'
+        //dashboardleftmenu:'leftmenu'
+        dashboardleftmenu:'/demoData/dashboardFramework/leftmenu.json'
     }
 }

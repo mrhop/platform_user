@@ -592,6 +592,7 @@ BasicTable.propTypes = {
     updateColumn: React.PropTypes.func,
     saveRow: React.PropTypes.func,
     panelActionCallBack: React.PropTypes.object,
+    endpoints:React.PropTypes.array
 };
 
 
@@ -646,7 +647,18 @@ class RowEditableTable extends BasicTable {
         );
     }
 }
-
+function mapStateToProps(state, ownProps) {
+    if (ownProps.symbol && state && state.form && state.form.main[ownProps.symbol]) {
+        const {
+            tableRules,
+            additionalFeature,
+            totalCount
+        } = state.table.main[ownProps.symbol]
+        return {tableRules, additionalFeature, totalCount}
+    } else {
+        return {};
+    }
+}
 module.exports = {
     DefaultTable,
     HoverTable,

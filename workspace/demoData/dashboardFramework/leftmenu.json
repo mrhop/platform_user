@@ -1,42 +1,47 @@
-[
-  {
-    "id": "1",
-    "url": "dashboard",
-    "iconClass": "home",
-    "name": "Dashboard"
-  },
-  {
-    "id": "2",
-    "iconClass": "cog",
-    "name": "Modules",
-    "subItems": [
-      {
-        "id": "3",
-        "url": "table",
-        "name": "Tables"
-      },
-      {
-        "id": "4",
-        "url": "chart",
-        "name": "Charts"
-      },
-      {
-        "id": "5",
-        "url": "form",
-        "name": "Form"
-      },
-      {
-        "id": "6",
-        "url": "dragdrop",
-        "name": "DragDrop"
-      }
-    ]
-  },
-  {
-    "id": "6",
-    "url": "#",
-    "selected": false,
-    "iconClass": "home",
-    "name": "Test"
+{
+  "responseData": {
+    "data": {
+      "content": [
+        {
+          "internalId": "1",
+          "moduleUrl": "dashboard",
+          "iconClass": "home",
+          "moduleName": "Dashboard",
+          "available":true
+        },
+        {
+          "internalId": "2",
+          "iconClass": "cog",
+          "moduleName": "Modules",
+          "available":true,
+          "children": [
+            {
+              "internalId": "3",
+              "moduleUrl": "table",
+              "moduleName": "Tables",
+              "available":true
+            },
+            {
+              "internalId": "4",
+              "moduleUrl": "chart",
+              "moduleName": "Charts",
+              "available":true
+            },
+            {
+              "internalId": "5",
+              "moduleUrl": "form",
+              "moduleName": "Form",
+              "available":true
+            },
+            {
+              "internalId": "6",
+              "moduleUrl": "dragdrop",
+              "moduleName": "DragDrop",
+              "available":true
+            }
+          ]
+        }
+      ]
+    }
   }
-]
+}
