@@ -151,4 +151,4 @@ const defaultCall = store=>
         }
     }
 
-module.exports = {CALL_API, defaultCall}
+module.exports = {CALL_API, callApi, defaultCall}

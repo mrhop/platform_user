@@ -1,8 +1,15 @@
 /**
  * Created by Donghui Huo on 2016/5/13.
  */
-import {Scrollbars} from 'react-custom-scrollbars';
 require('./table.scss');
+import {
+    getTableDispatch,
+    deleteTableRowDispatch,
+    addTableRowDispatch,
+    updateTableRowDispatch,
+    updateTableColumnDispatch,
+    refreshTableDispatch
+} from './actions'
 const defaultRowSizeOptions = [
     {value: 5, label: 5},
     {value: 10, label: 10},
@@ -12,8 +19,8 @@ const defaultRowSizeOptions = [
 ];
 const defaultCurrentSize = 5;
 const deleteRowConfirmModalData = {
-    content: <span>If you remove this row, this row can not be restored.</span>,
-    title: 'Do you want to remove this record?',
+    content: <span>删除一行，无法恢复.</span>,
+    title: '确定要删除该记录?',
     closeFun: function () {
         console.log('before close');
         return true;
@@ -22,17 +29,18 @@ const deleteRowConfirmModalData = {
         callback: function () {
             this.deleteRow();
         },
-        title: 'Confirm',
+        title: '确认',
     },
     footerCloseButton: {
         visible: true,
-        title: 'Cancel',
+        title: '取消',
     },
 };
+
 class BasicTable extends React.Component {
     constructor(props) {
         super(props);
-        this.tableId = 'id-' + UtilFun.uuid();
+        this.tableId = 'id-' + this.props.symbol;
         this.state = {
             pager: {
                 show: false,
@@ -44,36 +52,9 @@ class BasicTable extends React.Component {
             sort: {available: false},
             filter: {available: false},
             currentEditTdDom: {},
+            init: true
         };
-        var additionalFeature = this.props.additionalFeature;
-        if (additionalFeature && additionalFeature.pager) {
-            this.state.pager.show = true;
-            this.state.pager.options = [{label: 1, value: 0}, {label: 2, value: 1}, {
-                label: 3,
-                value: 2
-            }, {label: 4, value: 3}];
-            if (additionalFeature.pager.rowSize && additionalFeature.pager.rowSize.show) {
-                this.state.pager.rowSize.show = true;
-                this.state.pager.rowSize.options = additionalFeature.pager.rowSize.options ? additionalFeature.pager.rowSize.options : defaultRowSizeOptions;
-                this.state.pager.rowSize.value = additionalFeature.pager.rowSize.currentSize ? additionalFeature.pager.rowSize.currentSize : defaultCurrentSize;
-            }
-        }
-        if (additionalFeature && additionalFeature.sortAvailable) {
-            this.state.sort.available = true;
-        }
-        if (additionalFeature && additionalFeature.filterAvailable) {
-            this.state.filter.available = true;
-            this.state.filter.data = {};
-        }
-        if (this.props.tableRules && this.props.tableRules.thead) {
-            this.props.tableRules.thead.map(function (subItem, index) {
-                if (this.state.sort.available) {
-                    if (subItem.sort) {
-                        this.state.sort.currentTh = {sortName: subItem.value, sortDirection: subItem.sort};
-                    }
-                }
-            }, this);
-        }
+
         if (this.props.panelActionCallBack) {
             this.props.panelActionCallBack.clickEvent = function () {
                 if (this.state.currentEditTdDom.dom && this.state.currentEditTdDom.dom.classList.contains('open')) {
@@ -87,16 +68,61 @@ class BasicTable extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.getList();
+    }
 
     componentDidMount() {
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.tableRules && this.state.init) {
+            this.state.init = false;
+            var additionalFeature = nextProps.additionalFeature;
+            if (additionalFeature && additionalFeature.pager) {
+                this.state.pager.show = true;
+                this.state.pager.options = [{label: 1, value: 0}, {label: 2, value: 1}, {
+                    label: 3,
+                    value: 2
+                }, {label: 4, value: 3}];
+                if (additionalFeature.pager.rowSize && additionalFeature.pager.rowSize.show) {
+                    this.state.pager.rowSize.show = true;
+                    this.state.pager.rowSize.options = additionalFeature.pager.rowSize.options ? additionalFeature.pager.rowSize.options : defaultRowSizeOptions;
+                    this.state.pager.rowSize.value = additionalFeature.pager.rowSize.currentSize ? additionalFeature.pager.rowSize.currentSize : defaultCurrentSize;
+                }
+            }
+            if (additionalFeature && additionalFeature.sortAvailable) {
+                this.state.sort.available = true;
+            }
+            if (additionalFeature && additionalFeature.filterAvailable) {
+                this.state.filter.available = true;
+                this.state.filter.data = {};
+            }
+            if (nextProps.tableRules && nextProps.tableRules.thead) {
+                nextProps.tableRules.thead.map(function (subItem, index) {
+                    if (this.state.sort.available) {
+                        if (subItem.sort) {
+                            this.state.sort.currentTh = {sortName: subItem.value, sortDirection: subItem.sort};
+                        }
+                    }
+                }, this);
+            }
+        }
+        if (nextProps.tableRefresh) {
+            this.props.refreshTableDispatch();
+        }
+    }
+
     getList() {
-        this.props.getList && this.props.getList({
+
+        this.props.getTableDispatch && this.props.getTableDispatch({
             filters: this.state.filter.available ? this.state.filter.data : null,
             sort: this.state.sort.available ? this.state.sort.currentTh : null,
             rowSize: this.state.pager.rowSize.show ? this.state.pager.rowSize.value : null,
             currentPage: this.state.pager.currentValue ? this.state.pager.currentValue : 0,
+            endpoint: this.props.endpoints.getTableUrl,
+            symbol: this.props.symbol,
+            init: this.state.init
         })
     }
 
@@ -181,7 +207,9 @@ class BasicTable extends React.Component {
 
 
     onRowSave() {
-        this.props.saveRow && this.props.saveRow(this.state.addData)
+        this.state.addData.endpoint = this.props.endpoints.addTableRowUrl
+        this.state.addData.symbol = this.props.symbol
+        this.props.addTableRowDispatch && this.props.addTableRowDispatch(this.state.addData)
         this.state.addData = {};
         this.tableRoot.querySelector('thead tr.theadRowAdd').style.display = 'none';
     }
@@ -204,7 +232,7 @@ class BasicTable extends React.Component {
             };
         }
         var thead = null;
-        if (this.props.tableRules.thead) {
+        if (this.props.tableRules && this.props.tableRules.thead) {
             thead = this.props.tableRules.thead.map(function (subItem, index) {
                 var sortItem = null;
                 var onclick = null;
@@ -228,7 +256,7 @@ class BasicTable extends React.Component {
 
 
         var theadFilter = null;
-        if (this.props.tableRules.thead && this.state.filter && this.state.filter.available) {
+        if (this.props.tableRules && this.props.tableRules.thead && this.state.filter && this.state.filter.available) {
             theadFilter = this.props.tableRules.thead.map(function (subItem, index) {
                 var onFilter = this.onFilterChange.bind(this, subItem.value, subItem.editType);
                 var editContent = null;
@@ -259,7 +287,7 @@ class BasicTable extends React.Component {
                                                      getList={this.getList.bind(this)}
                                                      currentEditTdDom={this.state.currentEditTdDom}/>;
         var tfoot = null;
-        if (this.props.tableRules.tfoot) {
+        if (this.props.tableRules && this.props.tableRules.tfoot) {
             tfoot = this.props.tableRules.tfoot.map(function (subItem, index) {
                 return (<td key={index} colSpan={subItem.colSpan ? subItem.colSpan : null}
                             className={subItem.className}>{subItem.title}</td>);
@@ -272,7 +300,7 @@ class BasicTable extends React.Component {
             topOperations.push(<button key={topOperations.length} className="btn btn-primary btn-add-row"
                                        onClick={this.onRowAdd.bind(this)}>Add
                 row</button>);
-            if (this.props.tableRules.thead) {
+            if (this.props.tableRules && this.props.tableRules.thead) {
                 theadRowAdd = this.props.tableRules.thead.map(function (subItem, index) {
                     var onRowAddChange = this.onRowAddChange.bind(this, subItem.value, subItem.editType);
                     var editContent = null;
@@ -355,7 +383,7 @@ class BasicTable extends React.Component {
                             </tr> : null}
                             </thead>
                             <tfoot>
-                            <tr className={(tableExtraClass == 'striped' || (additionalFeature && additionalFeature.extraClass == 'striped') ) && this.props.tableData.length % 2 == 0 ? 'tr-deep' : null}>
+                            <tr className={(tableExtraClass == 'striped' || (additionalFeature && additionalFeature.extraClass == 'striped') ) && this.props.tableData&&this.props.tableData.length % 2 == 0 ? 'tr-deep' : null}>
                                 {tfoot}
                             </tr>
                             </tfoot>
@@ -377,11 +405,11 @@ class TableRowWrapper extends React.Component {
     }
 
     render() {
-        var tableRows = this.props.tableData.map(function (row, index) {
-            return (
-                <TableRow key={index} rowData={row} rowIndex={index}   {...this.props}  />
-            );
-        }, this);
+        var tableRows = this.props.tableData && this.props.tableData.map(function (row, index) {
+                return (
+                    <TableRow key={index} rowData={row} rowIndex={index}   {...this.props}  />
+                );
+            }, this);
         return (
             <tbody>
             {tableRows}
@@ -408,12 +436,14 @@ class TableRow extends React.Component {
     }
 
     onRowDelete(key) {
-        Modal.createModal.bind(this, deleteRowConfirmModalData, 'messageConfirm')();
+        Modal.createModal.bind(this, {modalValues: deleteRowConfirmModalData, type: 'messageConfirm'})();
     }
 
     deleteRow() {
-        this.props.deleteRow && this.props.deleteRow({
-            key: this.props.rowData.key
+        this.props.deleteTableRowDispatch && this.props.deleteTableRowDispatch({
+            key: this.props.rowData.key,
+            endpoint: this.props.endpoints.deleteTableRowUrl,
+            symbol: this.props.symbol
         })
     }
 
@@ -426,7 +456,12 @@ class TableRow extends React.Component {
     }
 
     onRowSave(rowKey) {
-        this.props.updateRow && this.props.updateRow({key: this.props.rowData.key, data: this.props.rowData.value});
+        this.props.updateTableRowDispatch && this.props.updateTableRowDispatch({
+            key: this.props.rowData.key,
+            data: this.props.rowData.value,
+            endpoint: this.props.endpoints.updateTableRowUrl,
+            symbol: this.props.symbol
+        });
         this.state.rowEditState = false;
         this.forceUpdate();
     }
@@ -504,8 +539,11 @@ class TableTd extends React.Component {
     }
 
     onTdSave(e) {
-        this.props.updateColumn && this.props.updateColumn({
-            key: this.props.rowKey, data: [{'name': this.props.theadItem.value, value: this.props.tdData.value}]
+        this.props.updateTableColumnDispatch && this.props.updateTableColumnDispatch({
+            key: this.props.rowKey,
+            data: [{'name': this.props.theadItem.value, value: this.props.tdData.value}],
+            endpoint: this.props.endpoints.updateTableColumnUrl,
+            symbol: this.props.symbol
         });
         this.tdDom.classList.remove('open');
         e.stopPropagation();
@@ -576,23 +614,31 @@ class TableTd extends React.Component {
         return (<td ref={(ref) => this.tdDom = ref} colSpan={theadItem.colSpan ? theadItem.colSpan : null}
                     className={ classNames(theadItem.className, theadItem && theadItem.columnEditable ? 'td-editable' : null)}
                     onClick={theadItem && theadItem.columnEditable && this.onTdClick.bind(this,theadItem.value)}><span
-            className={tdValueClassName}>{theadItem.className == 'td-id' && !tdItem.value ? rowIndex + 1 : tdItem.value}</span>{editContent}{columnEditContent}{columnEditContentAction}
+            className={tdValueClassName}>{theadItem.className == 'td-id' && !tdItem.value ? rowIndex + 1 : tdItem.value.toString()}</span>{editContent}{columnEditContent}{columnEditContentAction}
         </td>);
     }
 }
 
 BasicTable.propTypes = {
-    tableRules: React.PropTypes.object,
     minHeight: React.PropTypes.number,
+    endpoints: React.PropTypes.object,
+
+    status: React.PropTypes.string,
+    message: React.PropTypes.string,
+    keys: React.PropTypes.array,
+    tableData: React.PropTypes.array,
+    tableRules: React.PropTypes.object,
     additionalFeature: React.PropTypes.object,
     totalCount: React.PropTypes.number,
-    getList: React.PropTypes.func,
-    deleteRow: React.PropTypes.func,
-    updateRow: React.PropTypes.func,
-    updateColumn: React.PropTypes.func,
-    saveRow: React.PropTypes.func,
+
+    getTableDispatch: React.PropTypes.func,
+    deleteTableRowDispatch: React.PropTypes.func,
+    addTableRowDispatch: React.PropTypes.func,
+    updateTableRowDispatch: React.PropTypes.func,
+    updateTableColumnDispatch: React.PropTypes.func,
+    refreshTableDispatch: React.PropTypes.func,
+
     panelActionCallBack: React.PropTypes.object,
-    endpoints:React.PropTypes.array
 };
 
 
@@ -648,22 +694,68 @@ class RowEditableTable extends BasicTable {
     }
 }
 function mapStateToProps(state, ownProps) {
-    if (ownProps.symbol && state && state.form && state.form.main[ownProps.symbol]) {
+    if (ownProps.symbol && state && state.table && state.table.main[ownProps.symbol]) {
         const {
+            status,
+            message,
+            keys,
+            tableData,
             tableRules,
             additionalFeature,
             totalCount
         } = state.table.main[ownProps.symbol]
-        return {tableRules, additionalFeature, totalCount}
+        return {status, message, keys, tableData, tableRules, additionalFeature, totalCount}
     } else {
         return {};
     }
 }
 module.exports = {
-    DefaultTable,
-    HoverTable,
-    BorderTable,
-    CondensedTable,
-    StripedTable,
-    RowEditableTable
+    DefaultTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(DefaultTable),
+    HoverTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(HoverTable),
+    BorderTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(BorderTable),
+    CondensedTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(CondensedTable),
+    StripedTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(StripedTable),
+    RowEditableTable: ReactRedux.connect(mapStateToProps, {
+        getTableDispatch,
+        deleteTableRowDispatch,
+        addTableRowDispatch,
+        updateTableRowDispatch,
+        updateTableColumnDispatch,
+        refreshTableDispatch
+    })(RowEditableTable)
 };

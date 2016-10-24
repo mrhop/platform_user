@@ -87,7 +87,7 @@ utilFun.prototype = {
                 return <li key={index}><input type="checkbox" name={parameters.name} id={parameters.name + '-' + index}
                                               data-name={parameters.name}
                                               value={ subItem.value}
-                                              checked={value.split(',').includes(subItem.value)  ? 'checked' : false}
+                                              checked={value? (value.indexOf(subItem.value) > -1 ? 'checked' : false) : false}
                                               onChange={parameters.onChangeCallback}/>
                     <label htmlFor={parameters.name + '-' + index}>{subItem.label}</label></li>;
             }, this);
@@ -102,15 +102,17 @@ utilFun.prototype = {
             return e.target.value;
         } else if (type == 'checkbox') {
             if (e.target.checked) {
-                value = value ? value + ',' + e.target.value : e.target.value;
+                if (value) {
+                    value.push(e.target.value)
+                } else {
+                    value = [e.target.value]
+                }
             } else {
-                value = value ? value.replace(e.target.value, '') : null;
-            }
-            if (value && value.endsWith(',')) {
-                value = value.substring(0, value.length - 1);
-            }
-            if (value && value.startsWith(',')) {
-                value = value.substring(1);
+                if (value) {
+                    value.splice(value.indexOf(e.target.value ), 1)
+                } else {
+                    value = null
+                }
             }
             return value;
         } else if (type == 'select') {

@@ -1,7 +1,7 @@
 const tableRowSchema = new normalizr.Schema('tableData', {
     idAttribute: rowData => rowData.key
 })
-const Schemas = {
+export const Schemas = {
     TableDataRow: tableRowSchema,
     TableData: normalizr.arrayOf(tableRowSchema)
 }
@@ -67,6 +67,18 @@ export function deleteTableRowDispatch(requestCondition = {key: null}) {
     return (dispatch, getState) => {
         return dispatch(deleteTableRow(requestCondition))
     }
+}
+
+export function callbackFailure(data) {
+    var modalValue = {
+        content: <span>操作失败,请检查网络连接状况</span>,
+        title:'操作失败',
+        footerCloseButton: {
+            visible: true,
+            title: '关闭',
+        }
+    }
+    Modal.createModal.bind(this, {modalValues: modalValue, type: 'messageError'})();
 }
 
 function addTableRow(requestCondition) {

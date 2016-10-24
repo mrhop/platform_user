@@ -1,5 +1,5 @@
 import dashBoardFramework from '../../include/dashBoard/reducers'
-import table from './table'
+import table from '../../common/table/reducers'
 import chart from './chart'
 import form from '../../common/form/reducers'
 import dragDrop from '../../common/dragDrop/reducers'

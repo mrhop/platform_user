@@ -626,6 +626,17 @@
           "title": "this is the footer for this table"
         }
       ]
+    },
+    "additionalFeature": {
+      "extraClass": "hover",
+      "sortAvailable": true,
+      "filterAvailable": true,
+      "pager": {
+        "show": true,
+        "rowSize": {
+          "show": true
+        }
+      }
     }
   }
 }
