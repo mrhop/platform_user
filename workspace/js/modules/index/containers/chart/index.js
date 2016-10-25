@@ -2,67 +2,42 @@
  * Created by Donghui Huo on 2016/5/11.
  */
 require('./index.scss');
+import {LineChartWrapper,AreaChartWrapper,BarChartWrapper,PieChartWrapper,ScatterChartWrapper,TreemapChartWrapper} from '../../components/chart/DefaultChartWrapper'
 
-import {
-    getDemoLineChartDispatch,
-    getDemoAreaChartDispatch,
-    getDemoBarChartDispatch,
-    getDemoPieChartDispatch,
-    getDemoScatterChartDispatch,
-    getDemoTreemapChartDispatch
-} from '../../actions/chart';
-import LineChart from '../../components/charts/LineChart';
-import AreaChart from '../../components/charts/AreaChart';
-import BarChart from '../../components/charts/BarChart';
-import PieChart from '../../components/charts/PieChart';
-import ScatterChart from '../../components/charts/ScatterChart';
-import TreemapChart from '../../components/charts/TreemapChart';
-class DashBoardMainBlock extends React.Component {
+export default class DashBoardMainBlock extends React.Component {
     constructor(props) {
         super(props);
 
     }
 
-    componentWillMount() {
-        //data init
-        this.props.getDemoLineChartDispatch()
-        this.props.getDemoAreaChartDispatch()
-        this.props.getDemoBarChartDispatch()
-        this.props.getDemoPieChartDispatch()
-        this.props.getDemoScatterChartDispatch()
-        this.props.getDemoTreemapChartDispatch()
-    }
-
-    componentWillReceiveProps(nextProps) {
-    }
 
     render() {
 
         var columns = [
                 <Panel.PanelWithHeader panelValues={{title : 'Default Line Chart'}}>
-                    <LineChart />
+                    <BarChartWrapper/>
                 </Panel.PanelWithHeader>,
                 <Panel.PanelWithHeader panelValues={{title : 'Default Area Chart'}}>
-                    <AreaChart />
+                    <AreaChartWrapper/>
                 </Panel.PanelWithHeader>
             ]
             ;
         var columns2 = [
                 <Panel.PanelWithHeader panelValues={{title : 'Default Bar Chart'}}>
-                    <BarChart />
+                    <LineChartWrapper />
                 </Panel.PanelWithHeader>,
                 <Panel.PanelWithHeader panelValues={{title : 'Default Pie Chart'}}>
-                    <PieChart />
+                    <PieChartWrapper/>
                 </Panel.PanelWithHeader>
             ]
             ;
 
         var columns3 = [
                 <Panel.PanelWithHeader panelValues={{title : 'Default Scatter Chart'}}>
-                    <ScatterChart />
+                    <ScatterChartWrapper/>
                 </Panel.PanelWithHeader>,
                 <Panel.PanelWithHeader panelValues={{title : 'Default Treemap Chart'}}>
-                    <TreemapChart />
+                    <TreemapChartWrapper/>
                 </Panel.PanelWithHeader>
             ]
             ;
@@ -77,24 +52,3 @@ class DashBoardMainBlock extends React.Component {
             ;
     }
 }
-
-DashBoardMainBlock.propTypes = {
-    getDemoLineChartDispatch: React.PropTypes.func.isRequired,
-    getDemoAreaChartDispatch: React.PropTypes.func.isRequired,
-    getDemoBarChartDispatch: React.PropTypes.func.isRequired,
-    getDemoPieChartDispatch: React.PropTypes.func.isRequired,
-    getDemoScatterChartDispatch: React.PropTypes.func.isRequired,
-    getDemoTreemapChartDispatch: React.PropTypes.func.isRequired,
-}
-function mapStateToProps(state, ownProps) {
-    return {};
-}
-
-export default ReactRedux.connect(mapStateToProps, {
-    getDemoLineChartDispatch,
-    getDemoAreaChartDispatch,
-    getDemoBarChartDispatch,
-    getDemoPieChartDispatch,
-    getDemoScatterChartDispatch,
-    getDemoTreemapChartDispatch
-})(DashBoardMainBlock)

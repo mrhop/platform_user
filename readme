@@ -1,2 +1,3 @@
-now:给table做通用的reduce以及action，并设计模型处理,下午将table走通，然后连上一个role表进行测试，同时考虑是否要将可见性放置，所有特性的东西从后台取得，配置在前台，这个怎么处理？
-从module处理，多对应几个modules，然后modules 对应不同的feature，给出feature的特殊规范，并给出一个通用的fetch js
+table部分前端暂时完成，接下来要把chart也给完整封装--基本实现，要把warning去除掉
+然后将左侧的链接状态保持和右侧的breadcrumb也给实现了，
+然后整合前后台，然后要给出一个可刷新的链接实现方式，在nginx处考虑
