@@ -11,7 +11,7 @@ function getLeftMenu(requestCondition) {
         [MiddleWare.CALL_API]: {
             httpType: 'get',
             types: [DASHBOARD_FRAMEWORK_LEFTMENU_REQUEST, DASHBOARD_FRAMEWORK_LEFTMENU_SUCCESS, DASHBOARD_FRAMEWORK_LEFTMENU_FAILURE],
-            endpoint: endpoints.dashboardleftmenu,
+            endpoint: baseUrl + endpoints.dashboardleftmenu,
         },
         requestCondition
     }
@@ -24,14 +24,14 @@ export function getLeftMenuDispatch(requestCondition) {
 
 export function leftMenuCollapseChange(requestCondition) {
     return (dispatch, getState) => {
-        return dispatch({requestCondition,type:DASHBOARD_FRAMEWORK_LEFTMENU_COLLAPSE_CHANGE});
+        return dispatch({requestCondition, type: DASHBOARD_FRAMEWORK_LEFTMENU_COLLAPSE_CHANGE});
     }
 }
 
 
 export function leftMenuSelectedChange(requestCondition) {
     return (dispatch, getState) => {
-        return dispatch({requestCondition,type:DASHBOARD_FRAMEWORK_LEFTMENU_SELECT_CHANGE});
+        return dispatch({requestCondition, type: DASHBOARD_FRAMEWORK_LEFTMENU_SELECT_CHANGE});
     }
 }
 

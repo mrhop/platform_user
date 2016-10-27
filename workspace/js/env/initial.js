@@ -17,7 +17,7 @@ if (navigator.browserLanguage) {
     }
 }
 var name = "baseurl=";
-var baseUrl = null
+var baseUrl = "/"
 var ca = document.cookie.split(';');
 for (var i = 0; i < ca.length; i++) {
     var c = ca[i].trim();
@@ -32,9 +32,10 @@ module.exports = {
     locale: localeLanguage,
     baseUrl: baseUrl,
     endpoints: {
+        validateuser: 'validateuser',
         gettokenbypassword: 'gettokenbypassword',
         gettokenbyclient: 'gettokenbyclient',
-        //dashboardleftmenu:'leftmenu'
-        dashboardleftmenu:'/demoData/dashboardFramework/leftmenu.json'
+        dashboardleftmenu: 'leftmenu',
+        //dashboardleftmenu:'/demoData/dashboardFramework/leftmenu.json'
     }
 }

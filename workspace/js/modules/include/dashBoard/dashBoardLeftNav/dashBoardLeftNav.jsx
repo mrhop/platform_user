@@ -93,7 +93,8 @@ class DashboardLeftList extends React.Component {
             return (
                 item.available && (<li key={item.internalId} className={liClass} data-url={item.moduleUrl}
                                        onClick={this.onClick.bind(this)}>
-                    <ReactRouter.Link className={"al-sidebar-list-link"} to={ item.moduleUrl ? item.moduleUrl : '#'}
+                    <ReactRouter.Link className={"al-sidebar-list-link"}
+                                      to={ item.moduleUrl ? baseUrl+item.moduleUrl : '#'}
                                       onMouseOver={this.onMouseOver}
                                       onClick={!item.moduleUrl ? e => e.preventDefault() : null}>
                         <i className={item.iconClass}></i>
@@ -143,7 +144,7 @@ class DashboardLeftSubList extends React.Component {
                 subItem.available && (<li key={subItem.internalId} data-url={subItem.moduleUrl} className={liClass}
                                           onClick={this.onClick.bind(this)}
                                           onMouseOver={this.onMouseOver}>
-                    <ReactRouter.Link className={"al-sidebar-list-link"} to={subItem.moduleUrl}>
+                    <ReactRouter.Link className={"al-sidebar-list-link"} to={baseUrl+subItem.moduleUrl}>
                         <span>{subItem.moduleName}</span>
                     </ReactRouter.Link>
                 </li>)

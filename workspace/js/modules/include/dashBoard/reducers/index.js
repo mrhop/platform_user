@@ -7,6 +7,11 @@ function leftMenuData(state = {}, action) {
         return l_merge({}, state)
     }
     if (action.type === '@@router/LOCATION_CHANGE') {
+        //do the selectd
+        var pathname = action.payload.pathname;
+        // if(state.data.responseData.content){
+        //
+        // }
     }
     if (action.type === ActionTypes.DASHBOARD_FRAMEWORK_LEFTMENU_COLLAPSE_CHANGE) {
         let collapse = false
