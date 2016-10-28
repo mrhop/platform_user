@@ -51,9 +51,11 @@ function mapStateToProps(state, ownProps) {
         const {
             data,
             collapse,
-            selectedUrl
+            selectedUrl,
+            openParent,
+            selectedTitle
         } = state.dashBoardFramework.leftMenuData
-        return {leftMenu: {data, collapse,selectedUrl}}
+        return {leftMenu: {data, collapse,selectedUrl,openParent,selectedTitle}}
     } else {
         return {leftMenu: {}};
     }

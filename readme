@@ -1,1 +1,4 @@
-现在需要实现左侧的链接
+完成基本架构的实现
+
+打包时需要做的修改 webpack.config.js 其中的var basePath = 属性
+以及更改html中js的引用

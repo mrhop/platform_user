@@ -42,7 +42,11 @@ class DashboardLeftList extends React.Component {
     }
 
     componentDidMount() {
+        if (this.openParent) {
+            this.onClick.bind(this, {currentTarget: this.openParent})();
+        }
     }
+
 
     onMouseOver(e) {
         var directLine = document.querySelector('.al-sidebar .direct-line');
@@ -73,9 +77,12 @@ class DashboardLeftList extends React.Component {
             if (sidebar && !sidebar.classList.contains('un-collapse')) {
                 this.props.leftMenuCollapseChange({collapse: false});
             }
-            e.preventDefault();
+            e.type && e.preventDefault();
         } else {
-            this.props.leftMenuSelectedChange({selectedUrl: e.currentTarget.getAttribute('data-url')});
+            this.props.leftMenuSelectedChange({
+                selectedUrl: e.currentTarget.getAttribute('data-url'),
+                selectedTitle: e.currentTarget.getAttribute('data-title')
+            });
             var w = window.innerWidth
                 || document.documentElement.clientWidth
                 || document.body.clientWidth;
@@ -88,20 +95,24 @@ class DashboardLeftList extends React.Component {
     render() {
         var classNames = require('classnames');
         var items = this.props.data.map(function (item) {
-            var liClass = classNames('al-sidebar-list-item', {'selected': item.url && item.url === this.props.leftMenu.selectedUrl ? 'selected' : null});
+            var liClass = classNames('al-sidebar-list-item', {'selected': this.props.leftMenu.selectedUrl == item.moduleUrl ? 'selected' : null});
             //var liClass = classNames('al-sidebar-list-item', {'selected': item.selected});
             return (
-                item.available && (<li key={item.internalId} className={liClass} data-url={item.moduleUrl}
-                                       onClick={this.onClick.bind(this)}>
+                item.available && (<li key={item.internalId} className={liClass}
+                                       data-url={item.moduleUrl} data-title={item.moduleName}
+                                       onClick={this.onClick.bind(this)} id={"li-parent-"+item.internalId}
+                                       ref={(liParent) => (item.internalId == this.props.leftMenu.openParent)&&(this.openParent = liParent)}>
                     <ReactRouter.Link className={"al-sidebar-list-link"}
-                                      to={ item.moduleUrl ? baseUrl+item.moduleUrl : '#'}
+                                      to={ item.moduleUrl ? item.moduleUrl : null}
                                       onMouseOver={this.onMouseOver}
                                       onClick={!item.moduleUrl ? e => e.preventDefault() : null}>
                         <i className={item.iconClass}></i>
                         <span>{item.moduleName}</span>
                         {item.children ? (<b className="down"></b>) : null}
                     </ReactRouter.Link>
-                    {item.children ? (<DashboardLeftSubList {...this.props} data={item.children}/>) : null}
+                    {item.children ? (
+                        <DashboardLeftSubList {...this.props} data={item.children}
+                        />) : null}
                 </li>)
             );
         }, this);
@@ -126,7 +137,10 @@ class DashboardLeftSubList extends React.Component {
     }
 
     onClick(e) {
-        this.props.leftMenuSelectedChange({selectedUrl: e.currentTarget.getAttribute('data-url')});
+        this.props.leftMenuSelectedChange({
+            selectedUrl: e.currentTarget.getAttribute('data-url'),
+            selectedTitle: e.currentTarget.getAttribute('data-title')
+        });
         var w = window.innerWidth
             || document.documentElement.clientWidth
             || document.body.clientWidth;
@@ -139,15 +153,18 @@ class DashboardLeftSubList extends React.Component {
     render() {
         var classNames = require('classnames');
         var subItems = this.props.data.map(function (subItem) {
-            var liClass = classNames('al-sidebar-sublist-item', {'selected': subItem.moduleUrl && subItem.moduleUrl === this.props.leftMenu.selectedUrl ? 'selected' : null});
+            var selected = null
+            var liClass = classNames('al-sidebar-sublist-item', {'selected': this.props.leftMenu.selectedUrl == subItem.moduleUrl ? 'selected' : null});
             return (
-                subItem.available && (<li key={subItem.internalId} data-url={subItem.moduleUrl} className={liClass}
-                                          onClick={this.onClick.bind(this)}
-                                          onMouseOver={this.onMouseOver}>
-                    <ReactRouter.Link className={"al-sidebar-list-link"} to={baseUrl+subItem.moduleUrl}>
-                        <span>{subItem.moduleName}</span>
-                    </ReactRouter.Link>
-                </li>)
+                subItem.available && (
+                    <li key={subItem.internalId} data-url={subItem.moduleUrl} data-title={subItem.moduleName}
+                        className={liClass}
+                        onClick={this.onClick.bind(this)}
+                        onMouseOver={this.onMouseOver}>
+                        <ReactRouter.Link className={"al-sidebar-list-link"} to={subItem.moduleUrl}>
+                            <span>{subItem.moduleName}</span>
+                        </ReactRouter.Link>
+                    </li>)
             );
         }, this);
         return (<ul className="al-sidebar-sublist">{subItems}</ul>);

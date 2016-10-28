@@ -32,10 +32,9 @@ module.exports = {
     locale: localeLanguage,
     baseUrl: baseUrl,
     endpoints: {
-        validateuser: 'validateuser',
-        gettokenbypassword: 'gettokenbypassword',
-        gettokenbyclient: 'gettokenbyclient',
-        dashboardleftmenu: 'leftmenu',
+        gettokenbypassword: baseUrl + 'gettokenbypassword',
+        gettokenbyclient: baseUrl + 'gettokenbyclient',
+        dashboardleftmenu: baseUrl + 'leftmenu',
         //dashboardleftmenu:'/demoData/dashboardFramework/leftmenu.json'
     }
 }

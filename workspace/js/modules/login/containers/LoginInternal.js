@@ -7,7 +7,7 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {submitProcess: false}
-        this.submitUrl = baseUrl + endpoints.gettokenbypassword;
+        this.submitUrl = endpoints.gettokenbypassword;
         this.initRule = {
             structure: [{
                 name: 'username',
@@ -50,7 +50,7 @@ class Login extends React.Component {
         //data init
         //该属性从何得出
         this.props.initClientLoginDispatch(
-            {endpoint: baseUrl + endpoints.gettokenbyclient})
+            {endpoint: endpoints.gettokenbyclient})
     }
 
 

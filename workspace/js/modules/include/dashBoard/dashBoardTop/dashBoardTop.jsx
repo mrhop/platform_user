@@ -18,17 +18,17 @@ class DashboardTop extends React.Component {
                 this.props.leftMenuCollapseChange({collapse:true});
             }
         }
+        e.preventDefault();
         return false;
     }
 
     render() {
         return (
             <div className="page-top clearfix">
-                <a href="#" className="al-logo clearfix">
+                <ReactRouter.Link to={baseUrl} className="al-logo clearfix">
                     <span>{globalProps['app.name']}</span>{globalProps['app.adminPlatform']}
-                </a>
-                <a href="#" className="collapse-menu-link" onClick={this.onClick.bind(this)}></a>
-
+                </ReactRouter.Link>
+                <a className="collapse-menu-link" onClick={this.onClick.bind(this)}></a>
                 <div className="search">
                     <i className="ion-ios-search-strong"></i>
                     <input id="searchInput" type="text"
