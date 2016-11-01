@@ -237,7 +237,7 @@ class BasicTable extends React.Component {
                 var sortItem = null;
                 var onclick = null;
                 var subItemClassName = subItem.className;
-                if (this.state.sort && this.state.sort.available && !subItem.virtual) {
+                if (this.state.sort && this.state.sort.available && subItem.sortable) {
                     onclick = this.onSortClick.bind(this, subItem.value);
                     subItemClassName = classNames(subItemClassName, 'sortAvailable');
                     if (this.state.sort.currentTh && this.state.sort.currentTh.sortName == subItem.value) {
@@ -285,7 +285,8 @@ class BasicTable extends React.Component {
         var tbody = <TableRowWrapper {...this.props} tableId={this.tableId}
                                                      tableType={this.tableType}
                                                      getList={this.getList.bind(this)}
-                                                     currentEditTdDom={this.state.currentEditTdDom}/>;
+                                                     currentEditTdDom={this.state.currentEditTdDom}
+                                                     />;
         var tfoot = null;
         if (this.props.tableRules && this.props.tableRules.tfoot) {
             tfoot = this.props.tableRules.tfoot.map(function (subItem, index) {
@@ -512,12 +513,12 @@ class TableRow extends React.Component {
 class TableTd extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {tdEditState: false};
+        this.state = {tdEditState: false, tdData: this.props.tdData};
     }
 
     onTdEdit(type, e) {
-        this.props.tdData.value = UtilFun.formTypeValue(type, e, this.props.tdData.value)
-        this.props.currentEditTdDom.value = this.props.tdData.value
+        this.state.tdData = UtilFun.formTypeValue(type, e, this.state.tdData)
+        this.props.currentEditTdDom.value = this.state.tdData
         this.forceUpdate();
     }
 
@@ -530,9 +531,9 @@ class TableTd extends React.Component {
             this.props.currentEditTdDom.dom = this.tdDom;
             this.props.currentEditTdDom.rowKey = this.props.rowKey;
             this.props.currentEditTdDom.name = this.props.theadItem.value;
-            this.props.currentEditTdDom.value = this.props.tdData.value;
+            this.props.currentEditTdDom.value = this.state.tdData;
             this.tdDom.classList.add('open');
-            this.currentData = this.props.tdData.value;
+            this.currentData = this.state.tdData;
             this.forceUpdate();
             e.stopPropagation();
         }
@@ -541,7 +542,7 @@ class TableTd extends React.Component {
     onTdSave(e) {
         this.props.updateTableColumnDispatch && this.props.updateTableColumnDispatch({
             key: this.props.rowKey,
-            data: [{'name': this.props.theadItem.value, value: this.props.tdData.value}],
+            data: [{'name': this.props.theadItem.value, value: this.state.tdData}],
             endpoint: this.props.endpoints.updateTableColumnUrl,
             symbol: this.props.symbol
         });
@@ -550,7 +551,7 @@ class TableTd extends React.Component {
     }
 
     onTdCancel(name, e) {
-        this.props.tdData.value = this.currentData;
+        this.state.tdData = this.currentData;
         this.tdDom.classList.remove('open');
         this.state.tdEditState = false;
         this.forceUpdate();
@@ -558,7 +559,7 @@ class TableTd extends React.Component {
     }
 
     render() {
-        var tdItem = this.props.tdData;
+        var tdItem = this.state.tdData;
         var rowIndex = this.props.rowIndex;
         var theadItem = this.props.theadItem;
         var rowEditState = this.props.rowEditState;
@@ -566,7 +567,6 @@ class TableTd extends React.Component {
         var columnEditContent = null;
         var columnEditContentAction = null;
         var tdValueClassName = 'td-value';
-        tdItem.name = theadItem.value;
         if (theadItem && theadItem.editable && rowEditState) {
             var className = '';
             if (theadItem.editType == 'text') {
@@ -575,7 +575,7 @@ class TableTd extends React.Component {
             editContent = UtilFun.formType({
                 type: theadItem.editType,
                 name: theadItem.value + '-' + this.props.rowKey,
-                value: tdItem.value,
+                value: tdItem,
                 onChangeCallback: this.onTdEdit.bind(this, theadItem.editType),
                 options: theadItem.editValue,
                 className: className
@@ -593,7 +593,7 @@ class TableTd extends React.Component {
             columnEditContent = UtilFun.formType({
                 type: theadItem.editType,
                 name: theadItem.value + '-' + this.props.rowKey,
-                value: tdItem.value,
+                value: tdItem,
                 onChangeCallback: this.onTdEdit.bind(this, theadItem.editType),
                 options: theadItem.editValue,
                 className: className
@@ -614,7 +614,7 @@ class TableTd extends React.Component {
         return (<td ref={(ref) => this.tdDom = ref} colSpan={theadItem.colSpan ? theadItem.colSpan : null}
                     className={ classNames(theadItem.className, theadItem && theadItem.columnEditable ? 'td-editable' : null)}
                     onClick={theadItem && theadItem.columnEditable && this.onTdClick.bind(this,theadItem.value)}><span
-            className={tdValueClassName}>{theadItem.className == 'td-id' && !tdItem.value ? rowIndex + 1 : tdItem.value.toString()}</span>{editContent}{columnEditContent}{columnEditContentAction}
+            className={tdValueClassName}>{theadItem.className == 'td-id' && !tdItem ? rowIndex + 1 + (this.props.rowSize ? this.props.rowSize * this.props.currentPage : 0) : tdItem.toString()}</span>{editContent}{columnEditContent}{columnEditContentAction}
         </td>);
     }
 }
@@ -702,9 +702,11 @@ function mapStateToProps(state, ownProps) {
             tableData,
             tableRules,
             additionalFeature,
-            totalCount
+            totalCount,
+            rowSize,
+            currentPage
         } = state.table.main[ownProps.symbol]
-        return {status, message, keys, tableData, tableRules, additionalFeature, totalCount}
+        return {status, message, keys, tableData, tableRules, additionalFeature, totalCount,rowSize,currentPage}
     } else {
         return {};
     }

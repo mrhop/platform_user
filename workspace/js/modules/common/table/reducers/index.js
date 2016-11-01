@@ -30,6 +30,8 @@ function main(state = {}, action) {
                         state[action.requestCondition.symbol].additionalFeature = action.response.responseData.additionalFeature;
                     }
                     state[action.requestCondition.symbol].totalCount = action.response.responseData.totalCount;
+                    state[action.requestCondition.symbol].rowSize = action.response.responseData.rowSize;
+                    state[action.requestCondition.symbol].currentPage = action.response.responseData.currentPage;
                 }
                 return l_merge({}, state)
             }

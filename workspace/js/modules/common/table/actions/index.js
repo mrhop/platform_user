@@ -32,7 +32,7 @@ export const TABLE_COLUMN_UPDATE_FAILURE = 'TABLE_COLUMN_UPDATE_FAILURE'
 function getTable(requestCondition) {
     return {
         [MiddleWare.CALL_API]: {
-            httpType: 'get',
+            httpType: 'POST',
             types: [TABLE_REQUEST, TABLE_SUCCESS, TABLE_FAILURE],
             //because need to set some other things ,so can not give the schema
             //schema: Schemas.TableData,

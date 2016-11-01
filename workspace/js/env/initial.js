@@ -35,6 +35,8 @@ module.exports = {
         gettokenbypassword: baseUrl + 'gettokenbypassword',
         gettokenbyclient: baseUrl + 'gettokenbyclient',
         dashboardleftmenu: baseUrl + 'leftmenu',
-        //dashboardleftmenu:'/demoData/dashboardFramework/leftmenu.json'
+        roles: baseUrl + 'role/list',
+        users: baseUrl + 'user/list',
+        //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
     }
 }
