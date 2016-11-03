@@ -24,8 +24,10 @@ function main(state = {}, action) {
                         state[action.requestCondition.symbol].keys = camelizedJson.result;
                         const tableData = state[action.requestCondition.symbol].keys.map(id => camelizedJson.entities.tableData[id]);
                         state[action.requestCondition.symbol].tableData = tableData;
+                    } else {
+                        state[action.requestCondition.symbol].tableData = null;
                     }
-                    if(action.requestCondition.init){
+                    if (action.requestCondition.init) {
                         state[action.requestCondition.symbol].tableRules = action.response.responseData.rules;
                         state[action.requestCondition.symbol].additionalFeature = action.response.responseData.additionalFeature;
                     }

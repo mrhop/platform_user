@@ -37,6 +37,7 @@ module.exports = {
         dashboardleftmenu: baseUrl + 'leftmenu',
         roles: baseUrl + 'role/list',
         users: baseUrl + 'user/list',
+        deleteuser: baseUrl + 'user/delete',
         //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
     }
 }

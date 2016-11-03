@@ -134,11 +134,11 @@ export function updateTableColumnDispatch(requestCondition = {key,}) {
 }
 
 //refresh
-export function refreshTableDispatch(requestCondition = {symbol,}) {
+export function refreshTableDispatch(params = {symbol,}) {
     return (dispatch, getState) => {
         const {
             requestCondition
-        } = getState().table.main[symbol]
+        } = getState().table.main[params.symbol]
         return dispatch(getTable(requestCondition))
     }
 }

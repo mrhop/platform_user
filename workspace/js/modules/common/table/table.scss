@@ -18,12 +18,18 @@
               margin-left: 5px;
               @include transition(all 200ms linear);
               &:before {
-                content: '\e903';
+                content: '\e91a';
               }
               &.asc {
+                &:before{
+                  content: '\e903';
+                }
                 @include rotate(180deg);
               }
               &.desc {
+                &:before{
+                  content: '\e903';
+                }
                 @include rotate(0deg);
               }
             }
