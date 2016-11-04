@@ -38,6 +38,8 @@ module.exports = {
         roles: baseUrl + 'role/list',
         users: baseUrl + 'user/list',
         deleteuser: baseUrl + 'user/delete',
+        userinfo: baseUrl + 'user/info',
+        userupdate: baseUrl + 'user/update',
         //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
     }
 }

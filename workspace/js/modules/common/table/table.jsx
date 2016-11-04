@@ -307,7 +307,7 @@ class BasicTable extends React.Component {
             tfoot = this.props.tableRules.tfoot.map(function (subItem, index) {
                 return (<td key={index}
                             colSpan={subItem.colSpan ?(subItem.colSpan+('row-editable' === tableExtraClass?1:0)) : null}
-                            className={subItem.className}>{subItem.title}</td>);
+                            className={subItem.className}>{subItem.title}<span style={{float:"right"}}>共{this.props.totalCount}条记录</span></td>);
             }, this);
         }
         var topOperations = [];
@@ -643,7 +643,7 @@ class TableTd extends React.Component {
         return (<td ref={(ref) => this.tdDom = ref} colSpan={theadItem.colSpan ? theadItem.colSpan : null}
                     className={ classNames(theadItem.className, this.props.editable && theadItem && theadItem.columnEditable ? 'td-editable' : null,this.props.editable && theadItem && theadItem.className == 'td-id' ? 'td-editable' : null)}
                     onClick={this.props.editable && theadItem && theadItem.columnEditable && this.onTdClick.bind(this,theadItem.value)}>{
-            this.props.editable && theadItem.className == 'td-id' && <ReactRouter.Link to={this.props.updateUrl}>
+            this.props.editable && theadItem.className == 'td-id' && <ReactRouter.Link to={{ pathname: this.props.updateUrl, query: { key: this.props.rowKey }}}>
                 <span
                     className={tdValueClassName}>{!tdItem ? rowIndex + 1 + (this.props.rowSize ? this.props.rowSize * this.props.currentPage : 0) : tdItem.toString()}</span>
             </ReactRouter.Link>

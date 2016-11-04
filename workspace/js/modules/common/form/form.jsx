@@ -2,7 +2,7 @@
  * Created by Donghui Huo on 2016/5/13.
  */
 require('./form.scss');
-import {initForm, confirmFormDispatch} from './actions'
+import {initFormDispatch, confirmFormDispatch, resetForm} from './actions'
 import Text from './elements/text.jsx'
 import Textarea from './elements/textarea.jsx'
 import Checkbox from './elements/checkbox.jsx'
@@ -22,13 +22,65 @@ class BasicForm extends React.Component {
             },
             footerContent: <span>Form confirm Error</span>,
         }
-        this.state = {data: {}};
+        this.state = {data: {},init:true};
     }
 
     componentWillMount() {
         //init action,设置 rule
-        this.props.initForm({rule: this.props.initRule, formKey: this.props.symbol});
+        this.props.initFormDispatch({endpoint: this.props.initUrl, formKey: this.props.symbol});
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.rule && this.state.init) {
+            this.state.init = false;
+            const {structure} = nextProps.rule
+            if (this.formType === 'blockForm') {
+                for (var index in structure) {
+                    let item = structure[index]
+                    for (var subIndex in item) {
+                        let subItem = item[subIndex]
+                        if (subItem.type == 'daterange') {
+                            this.state.data[subItem['name']] = {};
+                            this.state.data[subItem['name']].dateTimeStart = subItem['defaultStartValue'] ? subItem['defaultStartValue'] : null;
+                            this.state.data[subItem['name']].dateTimeEnd = subItem['defaultEndValue'] ? subItem['defaultEndValue'] : null;
+                        } else if (subItem.type == 'checkbox') {
+                            var stateData = null
+                            if (subItem['defaultValue']) {
+                                stateData = []
+                                for (var i = 0; i < subItem['defaultValue'].length; i++) {
+                                    stateData.push(subItem['defaultValue'][i]);
+                                }
+                            }
+                            this.state.data[subItem['name']] = stateData;
+                        } else {
+                            this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
+                        }
+                    }
+                }
+            } else {
+                structure.forEach(function (item) {
+                    if (item.type == 'daterange') {
+                        this.state.data[item['name']] = {};
+                        this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
+                        this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
+                    } else if (item.type == 'checkbox') {
+                        var stateData = null
+                        if (item['defaultValue']) {
+                            stateData = []
+                            for (var i = 0; i < item['defaultValue'].length; i++) {
+                                stateData.push(item['defaultValue'][i]);
+                            }
+                        }
+                        this.state.data[item['name']] = stateData;
+                    } else {
+                        this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
+                    }
+                }.bind(this))
+            }
+        }
+    }
+    
+    
+    
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.status && nextProps.status === 'serverFailure') {
@@ -48,51 +100,7 @@ class BasicForm extends React.Component {
     }
 
     reset(e) {
-        const {structure} = this.props.initRule
-        if (this.formType === 'blockForm') {
-            for (var index in structure) {
-                let item = structure[index]
-                for (var subIndex in item) {
-                    let subItem = item[subIndex]
-                    if (subItem.type == 'daterange') {
-                        this.state.data[subItem['name']] = {};
-                        this.state.data[subItem['name']].dateTimeStart = subItem['defaultStartValue'] ? subItem['defaultStartValue'] : null;
-                        this.state.data[subItem['name']].dateTimeEnd = subItem['defaultEndValue'] ? subItem['defaultEndValue'] : null;
-                    } else if (subItem.type == 'checkbox') {
-                        var stateData = null
-                        if (subItem['defaultValue']) {
-                            stateData = []
-                            for (var i = 0; i < subItem['defaultValue'].length; i++) {
-                                stateData.push(subItem['defaultValue'][i]);
-                            }
-                        }
-                        this.state.data[subItem['name']] = stateData;
-                    } else {
-                        this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
-                    }
-                }
-            }
-        } else {
-            structure.forEach(function (item) {
-                if (item.type == 'daterange') {
-                    this.state.data[item['name']] = {};
-                    this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
-                    this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
-                } else if (item.type == 'checkbox') {
-                    var stateData = null
-                    if (item['defaultValue']) {
-                        stateData = []
-                        for (var i = 0; i < item['defaultValue'].length; i++) {
-                            stateData.push(item['defaultValue'][i]);
-                        }
-                    }
-                    this.state.data[item['name']] = stateData;
-                } else {
-                    this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
-                }
-            }.bind(this))
-        }
-        this.props.initForm({rule: this.props.initRule, formKey: this.props.symbol});
+        this.props.resetForm({rule: this.props.rule, formKey: this.props.symbol});
         e.preventDefault()
     }
 
@@ -160,9 +168,13 @@ class BasicForm extends React.Component {
             }
             if (this.formType === 'defaultForm' || this.formType === 'inlineForm' || this.formType === 'noLabelForm' || this.formType === 'horizontalForm') {
                 let formElements = structure.map(function (item, index) {
-                    let id = this.props.symbol + '-element-' + index;
-                    //this.state.data[item['name']] = item['defaultValue'] ? item['defaultValue'] : null;
-                    return this.generateFormElement(id, item, item['name'])
+                    if (item.available == undefined) {
+                        let id = this.props.symbol + '-element-' + index;
+                        //this.state.data[item['name']] = item['defaultValue'] ? item['defaultValue'] : null;
+                        return this.generateFormElement(id, item, item['name'])
+                    }else {
+                        return null
+                    }
                     //this.state.data[item['name']]
                 }, this)
                 return <div className={formDivClasses}>
@@ -192,13 +204,17 @@ class BasicForm extends React.Component {
                     }
                     let size = parseInt(12 / length);
                     let formElements = item.map(function (subItem, subIndex) {
-                        let id = this.props.symbol + '-element-' + index + '-' + subIndex;
-                        //this.state.data[subItem['name']] = subItem['defaultValue'] ? subItem['defaultValue'] : null;
-                        const formElement = this.generateFormElement(id, subItem, subItem['name']);
-                        return subItem.type === 'hidden' ? formElement :
-                            <div key={subIndex} className={"col col-sm-" + size}>
-                                {formElement}
-                            </div>
+                        if (subItem.available == undefined) {
+                            let id = this.props.symbol + '-element-' + index + '-' + subIndex;
+                            //this.state.data[subItem['name']] = subItem['defaultValue'] ? subItem['defaultValue'] : null;
+                            const formElement = this.generateFormElement(id, subItem, subItem['name']);
+                            return subItem.type === 'hidden' ? formElement :
+                                <div key={subIndex} className={"col col-sm-" + size}>
+                                    {formElement}
+                                </div>
+                        } else {
+                            return null
+                        }
                     }, this)
                     return <div className="row" key={index}>{formElements}</div>
                 }, this);
@@ -229,25 +245,6 @@ class DefaultForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'defaultForm'
-        const {structure} = this.props.initRule
-        structure.forEach(function (item) {
-            if (item.type == 'daterange') {
-                this.state.data[item['name']] = {};
-                this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
-                this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
-            } else if (item.type == 'checkbox') {
-                var stateData = null
-                if (item['defaultValue']) {
-                    stateData = []
-                    for (var i = 0; i < item['defaultValue'].length; i++) {
-                        stateData.push(item['defaultValue'][i]);
-                    }
-                }
-                this.state.data[item['name']] = stateData;
-            } else {
-                this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
-            }
-        }.bind(this))
     }
 
     render() {
@@ -259,25 +256,6 @@ class InlineForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'inlineForm'
-        const {structure} = this.props.initRule
-        structure.forEach(function (item) {
-            if (item.type == 'daterange') {
-                this.state.data[item['name']] = {};
-                this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
-                this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
-            } else if (item.type == 'checkbox') {
-                var stateData = null
-                if (item['defaultValue']) {
-                    stateData = []
-                    for (var i = 0; i < item['defaultValue'].length; i++) {
-                        stateData.push(item['defaultValue'][i]);
-                    }
-                }
-                this.state.data[item['name']] = stateData;
-            } else {
-                this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
-            }
-        }.bind(this))
     }
 
     render() {
@@ -289,25 +267,6 @@ class NoLabelForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'noLabelForm'
-        const {structure} = this.props.initRule
-        structure.forEach(function (item) {
-            if (item.type == 'daterange') {
-                this.state.data[item['name']] = {};
-                this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
-                this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
-            } else if (item.type == 'checkbox') {
-                var stateData = null
-                if (item['defaultValue']) {
-                    stateData = []
-                    for (var i = 0; i < item['defaultValue'].length; i++) {
-                        stateData.push(item['defaultValue'][i]);
-                    }
-                }
-                this.state.data[item['name']] = stateData;
-            } else {
-                this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
-            }
-        }.bind(this))
     }
 
     render() {
@@ -319,26 +278,6 @@ class HorizontalForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'horizontalForm'
-        const {structure} = this.props.initRule
-        structure.forEach(function (item) {
-            if (item.type == 'daterange') {
-                this.state.data[item['name']] = {};
-                this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
-                this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
-            } else if (item.type == 'checkbox') {
-                var stateData = null
-                if (item['defaultValue']) {
-                    stateData = []
-                    for (var i = 0; i < item['defaultValue'].length; i++) {
-                        stateData.push(item['defaultValue'][i]);
-                    }
-                }
-                this.state.data[item['name']] = stateData;
-            } else {
-                this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
-            }
-        }.bind(this))
-
     }
 
     render() {
@@ -350,29 +289,6 @@ class BlockForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'blockForm'
-        const {structure} = this.props.initRule
-        for (var index in structure) {
-            let item = structure[index]
-            for (var subIndex in item) {
-                let subItem = item[subIndex]
-                if (subItem.type == 'daterange') {
-                    this.state.data[subItem['name']] = {};
-                    this.state.data[subItem['name']].dateTimeStart = subItem['defaultStartValue'] ? subItem['defaultStartValue'] : null;
-                    this.state.data[subItem['name']].dateTimeEnd = subItem['defaultEndValue'] ? subItem['defaultEndValue'] : null;
-                } else if (subItem.type == 'checkbox') {
-                    var stateData = null
-                    if (subItem['defaultValue']) {
-                        stateData = []
-                        for (var i = 0; i < subItem['defaultValue'].length; i++) {
-                            stateData.push(subItem['defaultValue'][i]);
-                        }
-                    }
-                    this.state.data[subItem['name']] = stateData;
-                } else {
-                    this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
-                }
-            }
-        }
     }
 
     render() {
@@ -392,7 +308,6 @@ BasicForm.propTypes = {
     status: React.PropTypes.string,
     message: React.PropTypes.string,
     responseData: React.PropTypes.object,
-    initForm: React.PropTypes.func,
     confirmFormDispatch: React.PropTypes.func,
     submitProcess: React.PropTypes.object
 }
@@ -417,9 +332,13 @@ function mapStateToProps(state, ownProps) {
 }
 
 module.exports = {
-    DefaultForm: ReactRedux.connect(mapStateToProps, {initForm, confirmFormDispatch})(DefaultForm),
-    InlineForm: ReactRedux.connect(mapStateToProps, {initForm, confirmFormDispatch})(InlineForm),
-    NoLabelForm: ReactRedux.connect(mapStateToProps, {initForm, confirmFormDispatch})(NoLabelForm),
-    HorizontalForm: ReactRedux.connect(mapStateToProps, {initForm, confirmFormDispatch})(HorizontalForm),
-    BlockForm: ReactRedux.connect(mapStateToProps, {initForm, confirmFormDispatch})(BlockForm)
+    DefaultForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(DefaultForm),
+    InlineForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(InlineForm),
+    NoLabelForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(NoLabelForm),
+    HorizontalForm: ReactRedux.connect(mapStateToProps, {
+        initFormDispatch,
+        confirmFormDispatch,
+        resetForm
+    })(HorizontalForm),
+    BlockForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(BlockForm)
 };

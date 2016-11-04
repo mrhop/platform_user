@@ -80,7 +80,7 @@ var callApi = function (endpoint, schema, httpType, requestCondition) {
             }
         });
     } else if (httpType === 'GET' || httpType == 'DELETE') {
-        endpoint = endpoint + (requestCondition ? ('?' + toQueryString(requestCondition)) : '');
+        endpoint = endpoint + (requestCondition ? ((endpoint.indexOf('?')>-1?'&':'?') + toQueryString(requestCondition)) : '');
         return fetch(endpoint, {
             method: httpType,
             credentials: 'same-origin',

@@ -2,8 +2,29 @@ import * as ActionTypes from '../actions/'
 
 function leftMenuData(state = {}, action) {
     if (action.type === '@@router/LOCATION_CHANGE') {
-        state.selectedUrl = window.location.pathname;
-        state.selectedTitle = null;
+        state.selectedUrl = action.payload.pathname;
+        if(state.selectedUrl === baseUrl){
+            state.selectedTitle = null;
+            return state;
+        }
+        if(state.data&&state.data.responseData){
+            state.data.responseData.data.content.map(function (item) {
+                if(item.moduleUrl === action.payload.pathname){
+                    state.selectedTitle = item.moduleName;
+                    return ;
+                }
+                if (item.children) {
+                    item.children.map(function (subItem) {
+                        if(subItem.moduleUrl === action.payload.pathname){
+                            state.selectedTitle = subItem.moduleName;
+                            return;
+                        }
+                    });
+                }
+            })
+        }
+        //state.selectedTitle = null;
+
     }
     if (action.type === ActionTypes.DASHBOARD_FRAMEWORK_LEFTMENU_SUCCESS) {
         state.data = action.response
@@ -44,7 +65,7 @@ function leftMenuData(state = {}, action) {
             selectedTitle: action.requestCondition.selectedTitle
         })
     }
-    return state
+    return state;
 }
 
 export default Redux.combineReducers({leftMenuData})

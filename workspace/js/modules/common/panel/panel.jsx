@@ -13,9 +13,10 @@ class DefaultPanel extends React.Component {
                 if (child.type == "button" || child.type == "div") {
                     return child
                 } else {
-                    return React.cloneElement(child, {
+                    var obj =  React.cloneElement(child, {
                         panelActionCallBack: this.state.panelActionCallBack
                     })
+                    return obj;
                 }
             }
         );
