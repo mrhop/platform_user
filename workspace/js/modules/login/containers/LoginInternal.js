@@ -8,24 +8,6 @@ class Login extends React.Component {
         super(props);
         this.state = {submitProcess: false}
         this.submitUrl = endpoints.gettokenbypassword;
-        this.initRule = {
-            structure: [{
-                name: 'username',
-                label: this.props.intl.formatMessage({id: 'auth.user'}),
-                type: 'text',
-                placeholder: this.props.intl.formatMessage({id: 'auth.user.placeholder'}),
-                required: true,
-                validateRules: [{name: VALIDATE_RULE.REQUIRED_VALIDATE.name, errorMsg: '不能为空'}]
-            }, {
-                name: 'password',
-                label: this.props.intl.formatMessage({id: 'auth.password'}),
-                type: 'password',
-                placeholder: this.props.intl.formatMessage({id: 'auth.password'}),
-                required: true,
-                validateRules: [{name: VALIDATE_RULE.REQUIRED_VALIDATE.name, errorMsg: '不能为空'}]
-            },],
-            submit: {label: '登录'}
-        }
     }
 
     callbackFailure(data) {
@@ -53,15 +35,24 @@ class Login extends React.Component {
             {endpoint: endpoints.gettokenbyclient})
     }
 
+    componentWillReceiveProps(nextProps) {
+
+        if(nextProps.commonProperties){
+            global.commonProperties = nextProps.commonProperties;
+            if (window.localStorage) {
+                window.localStorage["common_properties" + (baseUrl?'::'+baseUrl:'')] = JSON.stringify(nextProps.commonProperties)
+            }
+        }
+
+    }
+
 
     render() {
         return this.props.clientValidated ? <div className='auth-block'>
-            <h1><ReactIntl.FormattedMessage id='auth.signIn'
-                                            values={{appName: globalProps['app.name'],adminPlatform: globalProps['app.adminPlatform']}}/>
-            </h1>
+            <h1>{commonProperties['platform.name']}</h1>
             <Form.HorizontalForm url={this.submitUrl} failureCallback={this.callbackFailure.bind(this)}
                                  callback={this.callbackSuccess.bind(this)}
-                                 initRule={this.initRule}
+                                 initUrl={endpoints.initlogin}
                                  symbol='form-login'/>
         </div> : null;
     }
@@ -80,9 +71,10 @@ function
 mapStateToProps(state, ownProps) {
     if (state && state.client) {
         const {
-            clientValidated
+            clientValidated,
+            commonProperties
         } = state.client
-        return {clientValidated}
+        return {clientValidated,commonProperties}
     } else {
         return {};
     }
@@ -92,7 +84,4 @@ const reactLogin = ReactRedux.connect(mapStateToProps, {
     initClientLoginDispatch
 })(Login)
 
-export
-default
-ReactIntl
-    .injectIntl(reactLogin)
+export default reactLogin

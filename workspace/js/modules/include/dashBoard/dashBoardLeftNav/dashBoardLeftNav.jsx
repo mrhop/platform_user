@@ -172,4 +172,4 @@ class DashboardLeftSubList extends React.Component {
 }
 
 
-export default ReactIntl.injectIntl(DashboardLeft)
+export default DashboardLeft

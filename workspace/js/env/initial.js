@@ -1,7 +1,6 @@
 /**
  * Created by Donghui Huo on 2016/4/26.
  */
-ReactIntl.addLocaleData([...ReactIntlEn, ...ReactIntlZh]);
 var localeLanguage = 'en-US';
 if (navigator.browserLanguage) {
     if (navigator.browserLanguage.toLowerCase() == 'zh-cn') {
@@ -27,13 +26,12 @@ for (var i = 0; i < ca.length; i++) {
     }
 }
 module.exports = {
-    //locale:'en-US'
-    //locale:'zh-CN'
     locale: localeLanguage,
     baseUrl: baseUrl,
     endpoints: {
-        gettokenbypassword: baseUrl + 'gettokenbypassword',
         gettokenbyclient: baseUrl + 'gettokenbyclient',
+        initlogin: baseUrl + 'initlogin',
+        gettokenbypassword: baseUrl + 'gettokenbypassword',
         dashboardleftmenu: baseUrl + 'leftmenu',
         roles: baseUrl + 'role/list',
         users: baseUrl + 'user/list',

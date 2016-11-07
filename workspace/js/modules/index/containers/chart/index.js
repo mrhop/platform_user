@@ -42,13 +42,12 @@ export default class DashBoardMainBlock extends React.Component {
             ]
             ;
 
-        return (<ReactIntl.IntlProvider locale={locale} messages={UtilFun.getIntl('dashBoardMainBlock')}>
+        return (
             <div>
                 <Layout.Columns2 columnValues={columns}/>
                 <Layout.Columns2 columnValues={columns2}/>
                 <Layout.Columns2 columnValues={columns3}/>
-            </div>
-        </ReactIntl.IntlProvider>)
+            </div>)
             ;
     }
 }

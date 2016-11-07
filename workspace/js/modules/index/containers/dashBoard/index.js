@@ -164,14 +164,13 @@ class DashBoardMainBlock extends React.Component {
                 </Panel.DefaultPanel>
             ]
             ;
-        return (<ReactIntl.IntlProvider locale={locale} messages={UtilFun.getIntl('dashBoardMainBlock')}>
+        return (
             <div>
                 <Layout.Columns4 columnValues={columns}/>
                 <Layout.Columns4 columnValues={columnsSecond}/>
                 <Layout.Columns4 columnValues={columnsThird}/>
                 <Layout.Columns3 columnValues={columnsFourth}/>
-            </div>
-        </ReactIntl.IntlProvider>)
+            </div>)
             ;
     }
 }

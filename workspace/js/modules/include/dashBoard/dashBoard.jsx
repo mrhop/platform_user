@@ -20,13 +20,11 @@ class DashBoardBlock extends React.Component {
     render() {
 
         return (
-            <ReactIntl.IntlProvider locale={locale} messages={UtilFun.getIntl('dashBoard','dashBoardMainBlock')}>
                 <div style={{'height' : '100%'}}>
                     <DashBoardLeftNav {...this.props}/>
                     <DashboardTop {...this.props}/>
                     <DashBoardMain {...this.props}/>
                 </div>
-            </ReactIntl.IntlProvider>
         );
     }
 }

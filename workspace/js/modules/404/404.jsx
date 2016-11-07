@@ -6,25 +6,25 @@ require('./404.scss');
 
 class ErrorPage404 extends React.Component {
     constructor(props) {
+        if (window.localStorage && window.localStorage["common_properties" + (baseUrl ? '::' + baseUrl : '')]) {
+            global.commonProperties = JSON.parse(window.localStorage["common_properties" + (baseUrl ? '::' + baseUrl : '')])
+        }
         super(props);
     }
 
     render() {
         return (
             <div>
-                <h1><ReactIntl.FormattedMessage id='404.error'/></h1>
-
-                <p><ReactIntl.FormattedMessage id='404.sorrySentence'/><a href={baseUrl}><ReactIntl.FormattedMessage
-                    id='404.backHome'/></a></p>
+                <h1>{commonProperties ? commonProperties['404.error'] : '404 Error'}</h1>
+                <p>{commonProperties ? commonProperties['404.sorrySentence'] : 'Sorry, that page doesn\'t exist.'}<a
+                    href={baseUrl}>{commonProperties ? commonProperties['404.backHome'] : 'Go to Home Page'}</a></p>
             </div>
         );
     }
 }
 
 ReactDOM.render(
-    <ReactIntl.IntlProvider locale={locale} messages={UtilFun.getIntl('404')}>
-        <ErrorPage404 />
-    </ReactIntl.IntlProvider>,
+    <ErrorPage404 />,
     document.querySelector('.page-not-found-modal')
 );
 

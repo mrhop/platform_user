@@ -2,12 +2,8 @@
  * Created by Donghui Huo on 2016/3/15.
  */
 import initial from '../env/initial';
-import intl from '../intl/intl';
 let utilFun = function () {
-    var locale = navigator.language.split('-');
-    locale = locale[1] ? '${locale[0]}-${locale[1].toUpperCase()}' : navigator.language;
-    global.locale = intl[locale] ? locale : initial.locale;
-    global.globalProps = intl[global.locale]['app'];
+    global.locale = initial.locale;
     global.baseUrl = initial.baseUrl;
     global.endpoints = initial.endpoints;
 };
@@ -22,15 +18,6 @@ utilFun.prototype = {
         } else {
             document.addEventListener('DOMContentLoaded', callback);
         }
-    },
-    getIntl: function (...pageKeys) {
-        var obj = {};
-        pageKeys.forEach(function (key) {
-            for (var subKey of Object.keys(intl[locale][key])) {
-                obj[subKey] = intl[locale][key][subKey];
-            }
-        });
-        return obj;
     },
     uuid: function () {
         var s = [];

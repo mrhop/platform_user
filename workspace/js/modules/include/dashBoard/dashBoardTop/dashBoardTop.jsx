@@ -13,9 +13,9 @@ class DashboardTop extends React.Component {
         var mainContent = document.querySelector('main');
         if (sidebar) {
             if (sidebar.classList.contains('collapse') || sidebar.clientWidth < 100) {
-                this.props.leftMenuCollapseChange({collapse:false});
+                this.props.leftMenuCollapseChange({collapse: false});
             } else {
-                this.props.leftMenuCollapseChange({collapse:true});
+                this.props.leftMenuCollapseChange({collapse: true});
             }
         }
         e.preventDefault();
@@ -26,13 +26,13 @@ class DashboardTop extends React.Component {
         return (
             <div className="page-top clearfix">
                 <ReactRouter.Link to={baseUrl} className="al-logo clearfix">
-                    <span>{globalProps['app.name']}</span>{globalProps['app.adminPlatform']}
+                    <span>{commonProperties['app.name']}</span>{commonProperties['app.adminPlatform']}
                 </ReactRouter.Link>
                 <a className="collapse-menu-link" onClick={this.onClick.bind(this)}></a>
                 <div className="search">
                     <i className="ion-ios-search-strong"></i>
                     <input id="searchInput" type="text"
-                           placeholder={this.props.intl.formatMessage({id:'dashBoard.searchPlaceHolder'})}/>
+                           placeholder={commonProperties['dashBoard.searchPlaceHolder']}/>
                 </div>
                 <div className="user-profile clearfix">
                     <div className="al-user-profile dropdown">
@@ -54,12 +54,11 @@ class DashboardTop extends React.Component {
                         </li>
                     </ul>
                 </div>
-                <div className="questions-section"><ReactIntl.FormattedMessage
-                    id='dashBoard.haveQuestions'/><a
+                <div className="questions-section">{commonProperties['dashBoard.haveQuestions']}<a
                     href="mailto:service@hhdd.com">service@hhdd.com</a>
                 </div>
             </div>
         );
     }
 }
-export default ReactIntl.injectIntl(DashboardTop)
+export default DashboardTop
