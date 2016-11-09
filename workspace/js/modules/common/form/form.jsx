@@ -92,14 +92,14 @@ class BasicForm extends React.Component {
             }
         }
         if (nextProps.status && nextProps.status === 'success') {
-            // reset the form
-            this.props.callback(nextProps.responseData);
             this.props.submitProcess.status = true
+            this.props.callback(nextProps.responseData);
         }
         return true;
     }
 
     reset(e) {
+        this.state.init = true;
         this.props.resetForm({rule: this.props.rule, formKey: this.props.symbol});
         e.preventDefault()
     }
