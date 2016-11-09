@@ -1,29 +1,35 @@
 import * as ActionTypes from '../actions/'
 
 function leftMenuData(state = {}, action) {
+    var data = {};
     if (action.type === '@@router/LOCATION_CHANGE') {
         state.selectedUrl = action.payload.pathname;
         if(state.selectedUrl === baseUrl){
             state.selectedTitle = null;
             return state;
         }
+        var checkable = false;
         if(state.data&&state.data.responseData){
             state.data.responseData.data.content.map(function (item) {
                 if(item.moduleUrl === action.payload.pathname){
                     state.selectedTitle = item.moduleName;
-                    return ;
+                    checkable = true;
+                    return;
                 }
                 if (item.children) {
                     item.children.map(function (subItem) {
                         if(subItem.moduleUrl === action.payload.pathname){
                             state.selectedTitle = subItem.moduleName;
+                            checkable = true;
                             return;
                         }
                     });
                 }
             })
+            if(!checkable){
+                location.href = baseUrl;
+            }
         }
-        //state.selectedTitle = null;
 
     }
     if (action.type === ActionTypes.DASHBOARD_FRAMEWORK_LEFTMENU_SUCCESS) {

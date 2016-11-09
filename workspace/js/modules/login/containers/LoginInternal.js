@@ -36,14 +36,6 @@ class Login extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
-        if(nextProps.commonProperties){
-            global.commonProperties = nextProps.commonProperties;
-            if (window.localStorage) {
-                window.localStorage["common_properties" + (baseUrl?'::'+baseUrl:'')] = JSON.stringify(nextProps.commonProperties)
-            }
-        }
-
     }
 
 

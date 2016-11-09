@@ -6,12 +6,8 @@ require('./404.scss');
 
 class ErrorPage404 extends React.Component {
     constructor(props) {
-        if (window.localStorage && window.localStorage["common_properties" + (baseUrl ? '::' + baseUrl : '')]) {
-            global.commonProperties = JSON.parse(window.localStorage["common_properties" + (baseUrl ? '::' + baseUrl : '')])
-        }
         super(props);
     }
-
     render() {
         return (
             <div>
