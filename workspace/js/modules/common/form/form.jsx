@@ -2,7 +2,7 @@
  * Created by Donghui Huo on 2016/5/13.
  */
 require('./form.scss');
-import {initFormDispatch, confirmFormDispatch, resetForm} from './actions'
+import {initFormDispatch, confirmFormDispatch, updateFormDispatch, resetForm} from './actions'
 import Text from './elements/text.jsx'
 import Textarea from './elements/textarea.jsx'
 import Checkbox from './elements/checkbox.jsx'
@@ -22,13 +22,14 @@ class BasicForm extends React.Component {
             },
             footerContent: <span>Form confirm Error</span>,
         }
-        this.state = {data: {},init:true};
+        this.state = {data: {}, init: true};
     }
 
     componentWillMount() {
         //init action,设置 rule
         this.props.initFormDispatch({endpoint: this.props.initUrl, formKey: this.props.symbol});
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.rule && this.state.init) {
             this.state.init = false;
@@ -77,10 +78,60 @@ class BasicForm extends React.Component {
                 }.bind(this))
             }
         }
+        if (nextProps.rule && nextProps.update&&nextProps.update.status) {
+            //update rule的处理
+            nextProps.update.status = false;
+            const {structure} = nextProps.rule
+            if (this.formType === 'blockForm') {
+                for (var index in structure) {
+                    let item = structure[index]
+                    for (var subIndex in item) {
+                        let subItem = item[subIndex]
+                        if (subItem.changed) {
+                            if (subItem.type == 'daterange') {
+                                this.state.data[subItem['name']] = {};
+                                this.state.data[subItem['name']].dateTimeStart = subItem['defaultStartValue'] ? subItem['defaultStartValue'] : null;
+                                this.state.data[subItem['name']].dateTimeEnd = subItem['defaultEndValue'] ? subItem['defaultEndValue'] : null;
+                            } else if (subItem.type == 'checkbox') {
+                                var stateData = null
+                                if (subItem['defaultValue']) {
+                                    stateData = []
+                                    for (var i = 0; i < subItem['defaultValue'].length; i++) {
+                                        stateData.push(subItem['defaultValue'][i]);
+                                    }
+                                }
+                                this.state.data[subItem['name']] = stateData;
+                            } else {
+                                this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
+                            }
+                        }
+                    }
+                }
+            } else {
+                structure.forEach(function (item) {
+                    if (item.changed) {
+                        if (item.type == 'daterange') {
+                            this.state.data[item['name']] = {};
+                            this.state.data[item['name']].dateTimeStart = item['defaultStartValue'] ? item['defaultStartValue'] : null;
+                            this.state.data[item['name']].dateTimeEnd = item['defaultEndValue'] ? item['defaultEndValue'] : null;
+                        } else if (item.type == 'checkbox') {
+                            var stateData = null
+                            if (item['defaultValue']) {
+                                stateData = []
+                                for (var i = 0; i < item['defaultValue'].length; i++) {
+                                    stateData.push(item['defaultValue'][i]);
+                                }
+                            }
+                            this.state.data[item['name']] = stateData;
+                        } else {
+                            this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
+                        }
+                    }
+                }.bind(this))
+            }
+        }
     }
-    
-    
-    
+
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.status && nextProps.status === 'serverFailure') {
@@ -109,26 +160,47 @@ class BasicForm extends React.Component {
         if (!this.props.submitProcess.status) {
             this.props.submitProcess.status = true
             this.forceUpdate();
-            this.props.confirmFormDispatch({data: this.state.data, formKey: this.props.symbol, url: this.props.url});
+            this.props.confirmFormDispatch({
+                data: this.state.data,
+                formKey: this.props.symbol,
+                url: this.props.url
+            });
         }
     }
 
     generateFormElement(id, rule, name) {
+        var changeFun = null;
+        if (rule.updatable) {
+            //可更新
+            changeFun = this.props.updateFormDispatch.bind(this,{
+                rule: this.props.rule,
+                formKey: this.props.symbol,
+                updateElement: name,
+                endpoint: this.props.updateUrl ? this.props.updateUrl : this.props.initUrl,
+                updateData: this.state.data[name]
+            });
+        }
         if (!rule.type || rule.type === 'text' || rule.type === 'email' ||
             rule.type === 'password' || rule.type === 'number'
             || rule.type === 'hidden' || rule.type === 'file') {
-            return <Text key={id} formType={this.formType} rule={rule} id={id} data={this.state.data} name={name}/>
+            return <Text key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+                         data={this.state.data} name={name}/>
         } else if (rule.type === 'radio') {
-            return <Radio key={id} formType={this.formType} rule={rule} id={id} data={this.state.data} name={name}/>
+            return <Radio key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+                          data={this.state.data} name={name}/>
         } else if (rule.type === 'checkbox') {
-            return <Checkbox key={id} formType={this.formType} rule={rule} id={id} data={this.state.data} name={name}/>
+            return <Checkbox key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+                             data={this.state.data} name={name}/>
         } else if (rule.type === 'select') {
-            return <SelectWrapper key={id} formType={this.formType} rule={rule} id={id} data={this.state.data}
+            return <SelectWrapper key={id} formType={this.formType} onchange={changeFun} rule={rule} id={id}
+                                  data={this.state.data}
                                   name={name}/>
         } else if (rule.type === 'textarea') {
-            return <Textarea key={id} formType={this.formType} rule={rule} id={id} data={this.state.data} name={name}/>
+            return <Textarea key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+                             data={this.state.data} name={name}/>
         } else if (rule.type === 'date' || rule.type === 'daterange' || rule.type === 'time' || rule.type === 'datetime') {
-            return <Datetime key={id} formType={this.formType} rule={rule} id={id} data={this.state.data} name={name}/>
+            return <Datetime key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+                             data={this.state.data} name={name}/>
         }
     }
 
@@ -172,7 +244,7 @@ class BasicForm extends React.Component {
                         let id = this.props.symbol + '-element-' + index;
                         //this.state.data[item['name']] = item['defaultValue'] ? item['defaultValue'] : null;
                         return this.generateFormElement(id, item, item['name'])
-                    }else {
+                    } else {
                         return null
                     }
                     //this.state.data[item['name']]
@@ -323,22 +395,44 @@ function mapStateToProps(state, ownProps) {
             status,
             message,
             responseData,
-            submitProcess
+            submitProcess,
+            update
         } = state.form.main[ownProps.symbol]
-        return {rule, status, message, responseData, submitProcess}
+        return {rule, status, message, responseData, submitProcess, update}
     } else {
         return {};
     }
 }
 
 module.exports = {
-    DefaultForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(DefaultForm),
-    InlineForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(InlineForm),
-    NoLabelForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(NoLabelForm),
+    DefaultForm: ReactRedux.connect(mapStateToProps, {
+        initFormDispatch,
+        confirmFormDispatch,
+        updateFormDispatch,
+        resetForm
+    })(DefaultForm),
+    InlineForm: ReactRedux.connect(mapStateToProps, {
+        initFormDispatch,
+        confirmFormDispatch,
+        updateFormDispatch,
+        resetForm
+    })(InlineForm),
+    NoLabelForm: ReactRedux.connect(mapStateToProps, {
+        initFormDispatch,
+        confirmFormDispatch,
+        updateFormDispatch,
+        resetForm
+    })(NoLabelForm),
     HorizontalForm: ReactRedux.connect(mapStateToProps, {
         initFormDispatch,
         confirmFormDispatch,
+        updateFormDispatch,
         resetForm
     })(HorizontalForm),
-    BlockForm: ReactRedux.connect(mapStateToProps, {initFormDispatch, confirmFormDispatch, resetForm})(BlockForm)
+    BlockForm: ReactRedux.connect(mapStateToProps, {
+        initFormDispatch,
+        confirmFormDispatch,
+        updateFormDispatch,
+        resetForm
+    })(BlockForm)
 };

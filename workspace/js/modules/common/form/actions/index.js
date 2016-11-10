@@ -5,6 +5,9 @@ export const FORM_VALIDATE_FAILURE = 'FORM_VALIDATE_FAILURE'
 export const FORM_POST_REQUEST = 'FORM_POST_REQUEST'
 export const FORM_POST_SUCCESS = 'FORM_POST_SUCCESS'
 export const FORM_POST_FAILURE = 'FORM_POST_FAILURE'
+export const FORM_UPDATE_REQUEST = 'FORM_UPDATE_REQUEST'
+export const FORM_UPDATE_SUCCESS = 'FORM_UPDATE_SUCCESS'
+export const FORM_UPDATE_FAILURE = 'FORM_UPDATE_FAILURE'
 export const FORM_RESET = 'FORM_RESET'
 const DATE_FORMAT = 'YYYY/MM/DD';
 export const VALIDATE_RULE = {
@@ -72,6 +75,26 @@ function initForm(requestCondition = {
 export function initFormDispatch(requestCondition = {formKey, endpoint}) {
     return (dispatch, getState) => {
         return dispatch(initForm(requestCondition))
+    }
+}
+
+
+function updateForm(requestCondition = {
+    formKey, endpoint
+}) {
+    //将数据进行处理化，并关联store后映射到form component中，然后根据props进行和state的对应更新
+    return {
+        [MiddleWare.CALL_API]: {
+            httpType: 'POST',
+            types: [FORM_UPDATE_REQUEST, FORM_UPDATE_SUCCESS, FORM_UPDATE_FAILURE],
+            endpoint: requestCondition.endpoint,
+        },
+        requestCondition
+    }
+}
+export function updateFormDispatch(requestCondition = {formKey, endpoint}) {
+    return (dispatch, getState) => {
+        return dispatch(updateForm(requestCondition))
     }
 }
 

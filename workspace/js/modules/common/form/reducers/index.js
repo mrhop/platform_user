@@ -12,6 +12,18 @@ function main(state = {}, action) {
         state[action.requestCondition.formKey].submitProcess = {status: false};
         return l_merge({}, state)
     }
+
+    if (action.type === ActionTypes.FORM_UPDATE_SUCCESS) {
+        //from 初始化时设置，判断id是否存在
+        state[action.requestCondition.formKey] = {}
+        if (action.response && action.response.responseData) {
+            state[action.requestCondition.formKey].rule = action.response.responseData;
+        }
+        state[action.requestCondition.formKey].status = 'update';
+        state[action.requestCondition.formKey].update = {status: true};
+        state[action.requestCondition.formKey].submitProcess = {status: false};
+        return l_merge({}, state)
+    }
     if (action.type === ActionTypes.FORM_VALIDATE_FAILURE) {
         state[action.formKey].rule.structure = action.structure
         state[action.formKey].submitProcess = {status: false};

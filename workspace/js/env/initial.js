@@ -29,6 +29,7 @@ module.exports = {
         users: baseUrl + 'user/list',
         deleteuser: baseUrl + 'user/delete',
         userinfo: baseUrl + 'user/info',
+        userinfooptionupdate: baseUrl + 'user/info/rule/update',
         userupdate: baseUrl + 'user/update',
         //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
     }

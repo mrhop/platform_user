@@ -33,8 +33,9 @@ export class UserUpdateWrapper extends React.Component {
     render() {
         let symbol = 'form-user-update'
         return <Form.HorizontalForm url={endpoints.userupdate} callback={this.callback}
-                                 initUrl={endpoints.userinfo+'?key='+this.props.location.query.key}
-                                 symbol={symbol}/>
+                                    initUrl={endpoints.userinfo+'?key='+this.props.location.query.key}
+                                    updateUrl={endpoints.userinfooptionupdate+'?key='+this.props.location.query.key}
+                                    symbol={symbol}/>
     }
 }
 

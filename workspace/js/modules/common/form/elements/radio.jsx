@@ -18,7 +18,11 @@ export default class Radio extends React.Component {
         if (this.props.rule.errorMsg != undefined) {
             this.props.rule.errorMsg = null;
         }
+        if(this.props.onchange){
+            this.props.onchange();
+        }
         this.forceUpdate();
+
     }
 
     render() {
