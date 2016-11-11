@@ -22,7 +22,7 @@ class BasicForm extends React.Component {
             },
             footerContent: <span>Form confirm Error</span>,
         }
-        this.state = {data: {}, init: true};
+        this.state = {data: {}, init: true,initRule:null};
     }
 
     componentWillMount() {
@@ -31,7 +31,10 @@ class BasicForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.rule && this.state.init) {
+        if (this.state.init) {
+            if(!this.state.initRule){
+                this.state.initRule = nextProps.rule
+            }
             this.state.init = false;
             const {structure} = nextProps.rule
             if (this.formType === 'blockForm') {
@@ -151,7 +154,7 @@ class BasicForm extends React.Component {
 
     reset(e) {
         this.state.init = true;
-        this.props.resetForm({rule: this.props.rule, formKey: this.props.symbol});
+        this.props.resetForm({rule:this.state.initRule,formKey: this.props.symbol});
         e.preventDefault()
     }
 
@@ -170,36 +173,37 @@ class BasicForm extends React.Component {
 
     generateFormElement(id, rule, name) {
         var changeFun = null;
+        var changeArgs = null;
         if (rule.updatable) {
             //可更新
-            changeFun = this.props.updateFormDispatch.bind(this,{
+            changeFun = this.props.updateFormDispatch;
+            changeArgs = {
                 rule: this.props.rule,
                 formKey: this.props.symbol,
                 updateElement: name,
                 endpoint: this.props.updateUrl ? this.props.updateUrl : this.props.initUrl,
-                updateData: this.state.data[name]
-            });
+            }
         }
         if (!rule.type || rule.type === 'text' || rule.type === 'email' ||
             rule.type === 'password' || rule.type === 'number'
             || rule.type === 'hidden' || rule.type === 'file') {
-            return <Text key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+            return <Text key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs} onchange={changeFun} id={id}
                          data={this.state.data} name={name}/>
         } else if (rule.type === 'radio') {
-            return <Radio key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+            return <Radio key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
                           data={this.state.data} name={name}/>
         } else if (rule.type === 'checkbox') {
-            return <Checkbox key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+            return <Checkbox key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         } else if (rule.type === 'select') {
-            return <SelectWrapper key={id} formType={this.formType} onchange={changeFun} rule={rule} id={id}
+            return <SelectWrapper key={id} formType={this.formType} onchangeargs = {changeArgs}  onchange={changeFun} rule={rule} id={id}
                                   data={this.state.data}
                                   name={name}/>
         } else if (rule.type === 'textarea') {
-            return <Textarea key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+            return <Textarea key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         } else if (rule.type === 'date' || rule.type === 'daterange' || rule.type === 'time' || rule.type === 'datetime') {
-            return <Datetime key={id} formType={this.formType} rule={rule} onchange={changeFun} id={id}
+            return <Datetime key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         }
     }
@@ -371,7 +375,6 @@ class BlockForm extends BasicForm {
 BasicForm.propTypes = {
     type: React.PropTypes.string,
     extraClassName: React.PropTypes.string,
-    initRule: React.PropTypes.object,
     url: React.PropTypes.any,
     callback: React.PropTypes.func,
     failureCallback: React.PropTypes.func,

@@ -230,7 +230,6 @@ class BasicTable extends React.Component {
     }
 
 
-
     renderBasic(tableExtraClass) {
         this.getPagerOptionsByTotalCount();
         var additionalFeature = this.props.additionalFeature;
@@ -307,13 +306,14 @@ class BasicTable extends React.Component {
             tfoot = this.props.tableRules.tfoot.map(function (subItem, index) {
                 return (<td key={index}
                             colSpan={subItem.colSpan ?(subItem.colSpan+('row-editable' === tableExtraClass?1:0)) : null}
-                            className={subItem.className}>{subItem.title}<span style={{float:"right"}}>共{this.props.totalCount}条记录</span></td>);
+                            className={subItem.className}>{subItem.title}<span
+                    style={{float:"right"}}>共{this.props.totalCount}条记录</span></td>);
             }, this);
         }
         var topOperations = [];
         var bottomOperations = [];
         var theadRowAdd = null;
-        if (this.state.addable&&tableExtraClass == 'row-editable'&&this.props.endpoints.addTableRowUrl) {
+        if (this.state.addable && tableExtraClass == 'row-editable' && this.props.endpoints.addTableRowUrl) {
             topOperations.push(<button key={topOperations.length} className="btn btn-primary btn-add-row"
                                        onClick={this.onRowAdd.bind(this)}>Add
                 row</button>);
@@ -355,10 +355,11 @@ class BasicTable extends React.Component {
                 }
             }
         }
-        if(this.state.addable&&tableExtraClass == 'row-editable'&&this.props.addUrl){
+        if (this.state.addable && tableExtraClass == 'row-editable' && this.props.addUrl) {
             //router to new page
             topOperations.push(
-                <ReactRouter.Link key={topOperations.length} className={"btn btn-primary btn-add-row"} to={this.props.addUrl}>
+                <ReactRouter.Link key={topOperations.length} className={"btn btn-primary btn-add-row"}
+                                  to={this.props.addUrl}>
                     <span>添加记录</span>
                 </ReactRouter.Link>);
         }
@@ -509,13 +510,13 @@ class TableRow extends React.Component {
         if (this.props.tableType == 'row-editable') {
             tds.push(<td key='row-actions' className="td-row-actions">
                 <div className="btn-group btn-group-xs edited">
-                    {this.props.editable && this.props.endpoints.updateTableRowUrl&&
+                    {this.props.editable && this.props.endpoints.updateTableRowUrl &&
                     <button className="btn btn-primary btn-xs edit"
                             onClick={this.onRowEdit.bind(this)}>
                         Edit
                     </button>
                     }
-                    {this.props.deletable &&this.props.endpoints.deleteTableRowUrl &&
+                    {this.props.deletable && this.props.endpoints.deleteTableRowUrl &&
                     <button className="btn btn-danger btn-xs delete"
                             onClick={this.onRowDelete.bind(this)}>
                         Delete
@@ -614,7 +615,7 @@ class TableTd extends React.Component {
         if (this.props.editable && theadItem && theadItem.columnEditable) {
             tdValueClassName = tdValueClassName + ' column-edit';
         }
-        if (this.props.editable &&theadItem && theadItem.columnEditable && this.state.tdEditState) {
+        if (this.props.editable && theadItem && theadItem.columnEditable && this.state.tdEditState) {
             var className = 'column-editable';
             if (theadItem.editType == 'text') {
                 className = className + ' input-text';
@@ -643,10 +644,15 @@ class TableTd extends React.Component {
         return (<td ref={(ref) => this.tdDom = ref} colSpan={theadItem.colSpan ? theadItem.colSpan : null}
                     className={ classNames(theadItem.className, this.props.editable && theadItem && theadItem.columnEditable ? 'td-editable' : null,this.props.editable && theadItem && theadItem.className == 'td-id' ? 'td-editable' : null)}
                     onClick={this.props.editable && theadItem && theadItem.columnEditable && this.onTdClick.bind(this,theadItem.value)}>{
-            this.props.editable && theadItem.className == 'td-id' && <ReactRouter.Link to={{ pathname: this.props.updateUrl, query: { key: this.props.rowKey }}}>
+            this.props.editable && theadItem.className == 'td-id' &&
+            <ReactRouter.Link to={{ pathname: this.props.updateUrl, query: { key: this.props.rowKey }}}>
                 <span
                     className={tdValueClassName}>{!tdItem ? rowIndex + 1 + (this.props.rowSize ? this.props.rowSize * this.props.currentPage : 0) : tdItem.toString()}</span>
             </ReactRouter.Link>
+        }{
+            !this.props.editable && theadItem.className == 'td-id' &&
+            <span
+                className={tdValueClassName}>{!tdItem ? rowIndex + 1 + (this.props.rowSize ? this.props.rowSize * this.props.currentPage : 0) : tdItem.toString()}</span>
         }{
             theadItem.className != 'td-id' &&
             <span className={tdValueClassName}>{tdItem.toString()}</span>
@@ -743,7 +749,18 @@ function mapStateToProps(state, ownProps) {
             currentPage,
             tableRefresh
         } = state.table.main[ownProps.symbol]
-        return {status, message, keys, tableData, tableRules, additionalFeature, totalCount, rowSize, currentPage,tableRefresh}
+        return {
+            status,
+            message,
+            keys,
+            tableData,
+            tableRules,
+            additionalFeature,
+            totalCount,
+            rowSize,
+            currentPage,
+            tableRefresh
+        }
     } else {
         return {};
     }

@@ -55,7 +55,7 @@ function main(state = {}, action) {
     if (action.type === ActionTypes.FORM_RESET) {
         //from 初始化时设置，判断id是否存在
         state[action.formKey] = {}
-        state[action.formKey].rule = action.rule
+        state[action.formKey].rule = action.rule;
         state[action.formKey].status = 'init';
         state[action.formKey].submitProcess = {status: false};
         return l_merge({}, state)

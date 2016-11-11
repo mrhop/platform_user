@@ -19,10 +19,10 @@ export default class Radio extends React.Component {
             this.props.rule.errorMsg = null;
         }
         if(this.props.onchange){
-            this.props.onchange();
+            this.props.onchangeargs.updateData = item;
+            this.props.onchange(this.props.onchangeargs);
         }
         this.forceUpdate();
-
     }
 
     render() {
