@@ -22,7 +22,7 @@ class BasicForm extends React.Component {
             },
             footerContent: <span>Form confirm Error</span>,
         }
-        this.state = {data: {}, init: true,initRule:null};
+        this.state = {data: {}, init: true, initRule: null};
     }
 
     componentWillMount() {
@@ -32,7 +32,7 @@ class BasicForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.state.init) {
-            if(!this.state.initRule){
+            if (!this.state.initRule) {
                 this.state.initRule = nextProps.rule
             }
             this.state.init = false;
@@ -81,7 +81,7 @@ class BasicForm extends React.Component {
                 }.bind(this))
             }
         }
-        if (nextProps.rule && nextProps.update&&nextProps.update.status) {
+        if (nextProps.rule && nextProps.update && nextProps.update.status) {
             //update rule的处理
             nextProps.update.status = false;
             const {structure} = nextProps.rule
@@ -108,10 +108,13 @@ class BasicForm extends React.Component {
                                 this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
                             }
                         }
+                        if(subItem['name'] ==nextProps.updateElement){
+                            nextProps.rule.structure[index][subIndex]['defaultValue'] = nextProps.updateData;
+                        }
                     }
                 }
             } else {
-                structure.forEach(function (item) {
+                structure.forEach(function (item,index) {
                     if (item.changed) {
                         if (item.type == 'daterange') {
                             this.state.data[item['name']] = {};
@@ -129,6 +132,9 @@ class BasicForm extends React.Component {
                         } else {
                             this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
                         }
+                    }
+                    if(item['name'] ==nextProps.updateElement){
+                        nextProps.rule.structure[index]['defaultValue'] = nextProps.updateData;
                     }
                 }.bind(this))
             }
@@ -154,7 +160,7 @@ class BasicForm extends React.Component {
 
     reset(e) {
         this.state.init = true;
-        this.props.resetForm({rule:this.state.initRule,formKey: this.props.symbol});
+        this.props.resetForm({rule: this.state.initRule, formKey: this.props.symbol});
         e.preventDefault()
     }
 
@@ -187,23 +193,29 @@ class BasicForm extends React.Component {
         if (!rule.type || rule.type === 'text' || rule.type === 'email' ||
             rule.type === 'password' || rule.type === 'number'
             || rule.type === 'hidden' || rule.type === 'file') {
-            return <Text key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs} onchange={changeFun} id={id}
+            return <Text key={id} formType={this.formType} rule={rule} onchangeargs={changeArgs} onchange={changeFun}
+                         id={id}
                          data={this.state.data} name={name}/>
         } else if (rule.type === 'radio') {
-            return <Radio key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
+            return <Radio key={id} formType={this.formType} rule={rule} onchangeargs={changeArgs} onchange={changeFun}
+                          id={id}
                           data={this.state.data} name={name}/>
         } else if (rule.type === 'checkbox') {
-            return <Checkbox key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
+            return <Checkbox key={id} formType={this.formType} rule={rule} onchangeargs={changeArgs}
+                             onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         } else if (rule.type === 'select') {
-            return <SelectWrapper key={id} formType={this.formType} onchangeargs = {changeArgs}  onchange={changeFun} rule={rule} id={id}
+            return <SelectWrapper key={id} formType={this.formType} onchangeargs={changeArgs} onchange={changeFun}
+                                  rule={rule} id={id}
                                   data={this.state.data}
                                   name={name}/>
         } else if (rule.type === 'textarea') {
-            return <Textarea key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
+            return <Textarea key={id} formType={this.formType} rule={rule} onchangeargs={changeArgs}
+                             onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         } else if (rule.type === 'date' || rule.type === 'daterange' || rule.type === 'time' || rule.type === 'datetime') {
-            return <Datetime key={id} formType={this.formType} rule={rule} onchangeargs = {changeArgs}  onchange={changeFun} id={id}
+            return <Datetime key={id} formType={this.formType} rule={rule} onchangeargs={changeArgs}
+                             onchange={changeFun} id={id}
                              data={this.state.data} name={name}/>
         }
     }
@@ -399,9 +411,11 @@ function mapStateToProps(state, ownProps) {
             message,
             responseData,
             submitProcess,
-            update
+            update,
+            updateElement,
+            updateData
         } = state.form.main[ownProps.symbol]
-        return {rule, status, message, responseData, submitProcess, update}
+        return {rule, status, message, responseData, submitProcess, update, updateElement, updateData}
     } else {
         return {};
     }

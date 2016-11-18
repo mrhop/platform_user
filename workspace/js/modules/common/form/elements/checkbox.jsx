@@ -39,6 +39,11 @@ export default class Checkbox extends React.Component {
         if (this.props.rule.errorMsg != undefined) {
             this.props.rule.errorMsg = null;
         }
+
+        if (this.props.onchange) {
+            this.props.onchangeargs.updateData = value && value.length > 0 ? value : null;
+            this.props.onchange(this.props.onchangeargs);
+        }
         this.forceUpdate();
     }
 

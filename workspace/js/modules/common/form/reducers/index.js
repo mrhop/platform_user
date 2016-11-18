@@ -18,6 +18,8 @@ function main(state = {}, action) {
         state[action.requestCondition.formKey] = {}
         if (action.response && action.response.responseData) {
             state[action.requestCondition.formKey].rule = action.response.responseData;
+            state[action.requestCondition.formKey].updateElement = action.requestCondition.updateElement;
+            state[action.requestCondition.formKey].updateData = action.requestCondition.updateData;
         }
         state[action.requestCondition.formKey].status = 'update';
         state[action.requestCondition.formKey].update = {status: true};
