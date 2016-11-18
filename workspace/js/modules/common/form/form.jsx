@@ -23,8 +23,8 @@ class BasicForm extends React.Component {
             footerContent: <span>Form confirm Error</span>,
         }
         this.state = {data: {}, init: true, initRule: null};
-    }
 
+    }
     componentWillMount() {
         //init action,设置 rule
         this.props.initFormDispatch({endpoint: this.props.initUrl, formKey: this.props.symbol});
@@ -108,13 +108,13 @@ class BasicForm extends React.Component {
                                 this.state.data[subItem['name']] = (subItem['defaultValue'] == 0 || subItem['defaultValue']) ? subItem['defaultValue'] : null;
                             }
                         }
-                        if(subItem['name'] ==nextProps.updateElement){
+                        if (subItem['name'] == nextProps.updateElement) {
                             nextProps.rule.structure[index][subIndex]['defaultValue'] = nextProps.updateData;
                         }
                     }
                 }
             } else {
-                structure.forEach(function (item,index) {
+                structure.forEach(function (item, index) {
                     if (item.changed) {
                         if (item.type == 'daterange') {
                             this.state.data[item['name']] = {};
@@ -133,7 +133,7 @@ class BasicForm extends React.Component {
                             this.state.data[item['name']] = (item['defaultValue'] == 0 || item['defaultValue']) ? item['defaultValue'] : null;
                         }
                     }
-                    if(item['name'] ==nextProps.updateElement){
+                    if (item['name'] == nextProps.updateElement) {
                         nextProps.rule.structure[index]['defaultValue'] = nextProps.updateData;
                     }
                 }.bind(this))
@@ -153,7 +153,12 @@ class BasicForm extends React.Component {
         }
         if (nextProps.status && nextProps.status === 'success') {
             this.props.submitProcess.status = true
-            this.props.callback(nextProps.responseData);
+            if (this.props.submitedRouteUrl) {
+                ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
+            }
+            if (this.props.callback) {
+                this.props.callback(nextProps.responseData);
+            }
         }
         return true;
     }
@@ -328,7 +333,6 @@ class BasicForm extends React.Component {
     }
 }
 
-
 class DefaultForm extends BasicForm {
     constructor(props) {
         super(props);
@@ -344,6 +348,7 @@ class InlineForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'inlineForm'
+        
     }
 
     render() {

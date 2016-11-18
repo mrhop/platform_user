@@ -5,7 +5,7 @@ import rootReducer from './reducers'
 import routes from './routes'
 import middleware from './middleware'
 
-const store = ConfigureStore.configureStore({reducer: rootReducer, middleware: middleware});
+export const store = ConfigureStore.configureStore({reducer: rootReducer, middleware: middleware});
 const history = ReactRouterRedux.syncHistoryWithStore(ReactRouter.browserHistory, store)
 
 ReactDOM.render(

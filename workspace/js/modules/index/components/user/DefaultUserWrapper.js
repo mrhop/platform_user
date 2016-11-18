@@ -1,5 +1,4 @@
 //--DEMOtABLE STRUCTURE
-
 let endpointsLocal = {
     getTableUrl: endpoints.users,
     deleteTableRowUrl: endpoints.deleteuser
@@ -27,7 +26,7 @@ export class UserUpdateWrapper extends React.Component {
     }
 
     callback(data) {
-        console.log('the data:' + data)
+        //do nothing!
     }
 
     render() {
@@ -35,6 +34,7 @@ export class UserUpdateWrapper extends React.Component {
         return <Form.HorizontalForm url={endpoints.userupdate} callback={this.callback}
                                     initUrl={endpoints.userinfo+'?key='+this.props.location.query.key}
                                     updateUrl={endpoints.userinfooptionupdate+'?key='+this.props.location.query.key}
+                                    submitedRouteUrl = {baseUrl+"user/list.html"}
                                     symbol={symbol}/>
     }
 }
