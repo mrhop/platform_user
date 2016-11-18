@@ -170,6 +170,14 @@
       color: $brand-danger;
     }
   }
+  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    &:focus {
+      border: 0;
+      @include box-shadow(none);
+    }
+  }
 
   div.action {
     div.submit {
