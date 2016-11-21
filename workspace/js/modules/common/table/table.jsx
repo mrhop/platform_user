@@ -546,6 +546,10 @@ class TableTd extends React.Component {
         this.state = {tdEditState: false, tdData: this.props.tdData};
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.state.tdData = nextProps.tdData;
+    }
+
     onTdEdit(type, e) {
         this.state.tdData = UtilFun.formTypeValue(type, e, this.state.tdData)
         this.props.currentEditTdDom.value = this.state.tdData
