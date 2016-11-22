@@ -256,8 +256,8 @@ class BasicForm extends React.Component {
                 actionElements = actions.map(function (item, index) {
                     var className = classNames("btn", item.extraClassName)
                     return <button key={index} type="button" className={className}
-                                   onClick={item.action}>{item.label}</button>;
-                })
+                                   onClick={item.action&&typeof item.action ==="string"?this.props[item.action]:item.action}>{item.label}</button>;
+                }, this)
             }
             if (this.formType === 'defaultForm' || this.formType === 'inlineForm' || this.formType === 'noLabelForm' || this.formType === 'horizontalForm') {
                 let formElements = structure.map(function (item, index) {

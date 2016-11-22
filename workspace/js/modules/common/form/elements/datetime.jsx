@@ -62,7 +62,9 @@ export default class DateTime extends React.Component {
 
         let datetimeElement = null
         if (rule.type === 'date') {
-            datetimeElement = <div className={rule.type}><DatePicker fixedHeight id={this.props.id}
+            datetimeElement = <div className={rule.type}><DatePicker
+                                                                        isClearable={true}
+                                                                        fixedHeight id={this.props.id}
                                                                      dateFormat={rule.dateFormat ? rule.dateFormat : DATE_FORMAT}
                                                                      selected={this.props.data[this.props.name] ?
                                                                      ( typeof this.props.data[this.props.name] === 'string' ?
@@ -77,7 +79,9 @@ export default class DateTime extends React.Component {
             var dateTimeEnd = this.props.data[this.props.name] ? this.props.data[this.props.name].dateTimeEnd : null
             var dateTimeStartClass = classNames(rule.type, (rule.validated !== undefined && !rule.validated) ? (!rule.dateTimeStartValidated ? 'has-error' : null) : null)
             var dateTimeEndClass = classNames(rule.type, (rule.validated !== undefined && !rule.validated) ? (!rule.dateTimeEndValidated ? 'has-error' : null) : null)
-            var datetimeStartEle = <div className={dateTimeStartClass}><DatePicker fixedHeight id={this.props.id}
+            var datetimeStartEle = <div className={dateTimeStartClass}><DatePicker
+                                                                            isClearable={true}
+                                                                            fixedHeight id={this.props.id}
                                                                                    dateFormat={rule.dateFormat ? rule.dateFormat : DATE_FORMAT}
                                                                                    selected={dateTimeStart ?
                                                                          ( typeof dateTimeStart === 'string' ?
@@ -97,6 +101,7 @@ export default class DateTime extends React.Component {
                                                                                    onChange={this.onChange.bind(this,'start')}/>
             </div>
             var datetimeEndEle = <div className={dateTimeEndClass}><DatePicker fixedHeight id={this.props.id}
+                                                                               isClearable={true}
                                                                                dateFormat={rule.dateFormat ? rule.dateFormat : DATE_FORMAT}
                                                                                selected={dateTimeEnd ?
                                                                          ( typeof dateTimeEnd === 'string' ?

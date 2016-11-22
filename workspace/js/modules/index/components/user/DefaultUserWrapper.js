@@ -29,12 +29,17 @@ export class UserUpdateWrapper extends React.Component {
         //do nothing!
     }
 
+    backup(){
+        ReactRouter.browserHistory.push(baseUrl+"user/list.html");
+    }
+
     render() {
         let symbol = 'form-user-update'
         return <Form.HorizontalForm url={endpoints.userupdate} callback={this.callback}
                                     initUrl={endpoints.userinfo+'?key='+this.props.location.query.key}
                                     updateUrl={endpoints.userinfooptionupdate+'?key='+this.props.location.query.key}
                                     submitedRouteUrl = {baseUrl+"user/list.html"}
+                                    backup = {this.backup}
                                     symbol={symbol}/>
     }
 }
