@@ -29,6 +29,7 @@ const toolsJs = [
     'normalizr',
     'humps',
     'moment',
+    __dirname + '/node_modules/moment/locale/zh-cn.js',
     //__dirname + '/node_modules/isomorphic-fetch/fetch-npm-node.js',
     'lodash/merge',
     'lodash/map',

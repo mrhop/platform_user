@@ -34,3 +34,16 @@ export class TableUpdateBlock extends React.Component {
             </Panel.PanelWithHeader>);
     }
 }
+
+export class TableAddBlock extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Panel.PanelWithHeader panelValues={{title : '添加用户信息'}}>
+                <UserUpdateWrapper {...this.props}/>
+            </Panel.PanelWithHeader>);
+    }
+}

@@ -44,3 +44,22 @@ export class UserUpdateWrapper extends React.Component {
     }
 }
 
+export class UserAddWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    callback(data) {
+        //do nothing!
+    }
+
+    render() {
+        let symbol = 'form-user-add'
+        return <Form.HorizontalForm url={endpoints.usersave} callback={this.callback}
+                                    initUrl={endpoints.useradd}
+                                    updateUrl={endpoints.useraddoptionupdate}
+                                    submitedRouteUrl = {baseUrl+"user/list.html"}
+                                    symbol={symbol}/>
+    }
+}
+
