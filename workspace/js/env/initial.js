@@ -34,6 +34,8 @@ module.exports = {
         useradd: baseUrl + 'user/add',
         usersave: baseUrl + 'user/save',
         useraddoptionupdate: baseUrl + 'user/add/rule/update',
+        userpersonalinfo: baseUrl + 'user/personal/info',
+        userpersonalupdate: baseUrl + 'user/personal/update',
         //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
     }
 }

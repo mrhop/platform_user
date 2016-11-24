@@ -68,6 +68,13 @@ export class UserAddWrapper extends React.Component {
                 title: '关闭',
             }
         }
+        this.serverSuccess= {
+            title: '新增用户成功',
+            footerCloseButton: {
+                visible: true,
+                title: '关闭',
+            }
+        }
     }
 
     callback(data) {
@@ -75,6 +82,9 @@ export class UserAddWrapper extends React.Component {
             this.serverFailureModalData.content = data.data.message
             Modal.createModal.bind(this, {modalValues: this.serverFailureModalData, type: 'messageError'})()
             return false
+        }else{
+            this.serverSuccess.content = "保存成功"
+            Modal.createModal.bind(this, {modalValues: this.serverSuccess, type: 'messageSuccess'})()
         }
         return true
     }
@@ -84,7 +94,46 @@ export class UserAddWrapper extends React.Component {
         return <Form.HorizontalForm url={endpoints.usersave} callback={this.callback.bind(this)}
                                     initUrl={endpoints.useradd}
                                     updateUrl={endpoints.useraddoptionupdate}
-                                    submitedRouteUrl={baseUrl+"user/list.html"}
+                                    symbol={symbol}/>
+    }
+}
+
+
+export class UserPersonalInfoWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.serverFailureModalData = {
+            title: '更新个人信息出错',
+            footerCloseButton: {
+                visible: true,
+                title: '关闭',
+            }
+        }
+        this.serverSuccess= {
+            title: '更新个人信息成功',
+            footerCloseButton: {
+                visible: true,
+                title: '关闭',
+            }
+        }
+    }
+
+    callback(data) {
+        if (data && data.data && data.data.message) {
+            this.serverFailureModalData.content = data.data.message
+            Modal.createModal.bind(this, {modalValues: this.serverFailureModalData, type: 'messageError'})()
+            return false
+        }else{
+            this.serverSuccess.content = "更新成功"
+            Modal.createModal.bind(this, {modalValues: this.serverSuccess, type: 'messageSuccess'})()
+        }
+        return true
+    }
+
+    render() {
+        let symbol = 'form-userpersonalinfo-update'
+        return <Form.HorizontalForm url={endpoints.userpersonalupdate} callback={this.callback.bind(this)}
+                                    initUrl={endpoints.userpersonalinfo}
                                     symbol={symbol}/>
     }
 }

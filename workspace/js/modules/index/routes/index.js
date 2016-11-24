@@ -9,6 +9,7 @@ export default [
         <ReactRouter.Route path={baseUrl+"user/list.html"} component={Index.user}/>
         <ReactRouter.Route path={baseUrl+"user/info.html"} component={Index.userUpdate}/>
         <ReactRouter.Route path={baseUrl+"user/add.html"} component={Index.userAdd}/>
+        <ReactRouter.Route path={baseUrl+"user/personalinfo.html"} component={Index.userPersonalInfo}/>
         <ReactRouter.Route path="table" component={Index.table}/>
         <ReactRouter.Route path="chart" component={Index.chart}/>
         <ReactRouter.Route path="form" component={Index.form}/>
