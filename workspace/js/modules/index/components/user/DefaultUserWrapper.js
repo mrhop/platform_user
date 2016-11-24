@@ -11,6 +11,7 @@ export class UserListWrapper extends React.Component {
 
     }
 
+
     render() {
         let symbol = 'table-user-lists'
         return <Table.RowEditableTable minHeight={300} addUrl={baseUrl+'user/add.html'}
@@ -23,23 +24,36 @@ export class UserListWrapper extends React.Component {
 export class UserUpdateWrapper extends React.Component {
     constructor(props) {
         super(props);
+        this.serverFailureModalData = {
+            title: '更新用户出错',
+            footerCloseButton: {
+                visible: true,
+                title: '关闭',
+            }
+        }
     }
+
 
     callback(data) {
-        //do nothing!
+        if (data && data.data && data.data.message) {
+            this.serverFailureModalData.content = data.data.message
+            Modal.createModal.bind(this, {modalValues: this.serverFailureModalData, type: 'messageError'})()
+            return false
+        }
+        return true
     }
 
-    backup(){
-        ReactRouter.browserHistory.push(baseUrl+"user/list.html");
+    backup() {
+        ReactRouter.browserHistory.push(baseUrl + "user/list.html");
     }
 
     render() {
         let symbol = 'form-user-update'
-        return <Form.HorizontalForm url={endpoints.userupdate} callback={this.callback}
+        return <Form.HorizontalForm url={endpoints.userupdate} callback={this.callback.bind(this)}
                                     initUrl={endpoints.userinfo+'?key='+this.props.location.query.key}
                                     updateUrl={endpoints.userinfooptionupdate+'?key='+this.props.location.query.key}
-                                    submitedRouteUrl = {baseUrl+"user/list.html"}
-                                    backup = {this.backup}
+                                    submitedRouteUrl={baseUrl+"user/list.html"}
+                                    backup={this.backup}
                                     symbol={symbol}/>
     }
 }
@@ -47,18 +61,30 @@ export class UserUpdateWrapper extends React.Component {
 export class UserAddWrapper extends React.Component {
     constructor(props) {
         super(props);
+        this.serverFailureModalData = {
+            title: '新增用户出错',
+            footerCloseButton: {
+                visible: true,
+                title: '关闭',
+            }
+        }
     }
 
     callback(data) {
-        //do nothing!
+        if (data && data.data && data.data.message) {
+            this.serverFailureModalData.content = data.data.message
+            Modal.createModal.bind(this, {modalValues: this.serverFailureModalData, type: 'messageError'})()
+            return false
+        }
+        return true
     }
 
     render() {
         let symbol = 'form-user-add'
-        return <Form.HorizontalForm url={endpoints.usersave} callback={this.callback}
+        return <Form.HorizontalForm url={endpoints.usersave} callback={this.callback.bind(this)}
                                     initUrl={endpoints.useradd}
                                     updateUrl={endpoints.useraddoptionupdate}
-                                    submitedRouteUrl = {baseUrl+"user/list.html"}
+                                    submitedRouteUrl={baseUrl+"user/list.html"}
                                     symbol={symbol}/>
     }
 }

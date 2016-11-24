@@ -3,7 +3,7 @@
  */
 require('./index.scss');
 
-import {UserListWrapper,UserUpdateWrapper} from '../../components/user/DefaultUserWrapper';
+import {UserListWrapper,UserUpdateWrapper,UserAddWrapper} from '../../components/user/DefaultUserWrapper';
 
 export default class TableMainBlock extends React.Component {
     constructor(props) {
@@ -43,7 +43,7 @@ export class TableAddBlock extends React.Component {
     render() {
         return (
             <Panel.PanelWithHeader panelValues={{title : '添加用户信息'}}>
-                <UserUpdateWrapper {...this.props}/>
+                <UserAddWrapper {...this.props}/>
             </Panel.PanelWithHeader>);
     }
 }

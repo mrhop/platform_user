@@ -153,12 +153,16 @@ class BasicForm extends React.Component {
         }
         if (nextProps.status && nextProps.status === 'success') {
             this.props.submitProcess.status = true
-            if (this.props.submitedRouteUrl) {
-                ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
-            }
             if (this.props.callback) {
-                this.props.callback(nextProps.responseData);
+                if(this.props.callback(nextProps.responseData)&&this.props.submitedRouteUrl){
+                    ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
+                }
+            }else{
+                if(this.props.submitedRouteUrl){
+                    ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
+                }
             }
+
         }
         return true;
     }
