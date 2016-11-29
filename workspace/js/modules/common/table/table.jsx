@@ -195,7 +195,12 @@ class BasicTable extends React.Component {
     }
 
     onFilterChange(filterName, type, e) {
-        this.state.filter.data[filterName] = UtilFun.formTypeValue(type, e, this.state.filter.data[filterName])
+
+        if (!UtilFun.formTypeValue(type, e, this.state.filter.data[filterName])) {
+            delete this.state.filter.data[filterName];
+        } else {
+            this.state.filter.data[filterName] = UtilFun.formTypeValue(type, e, this.state.filter.data[filterName])
+        }
         this.forceUpdate();
         UtilFun.delay(this.filterChange.bind(this, filterName), 400);
     }

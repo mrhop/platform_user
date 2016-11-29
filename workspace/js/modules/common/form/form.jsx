@@ -25,6 +25,7 @@ class BasicForm extends React.Component {
         this.state = {data: {}, init: true, initRule: null};
 
     }
+
     componentWillMount() {
         //init action,设置 rule
         this.props.initFormDispatch({endpoint: this.props.initUrl, formKey: this.props.symbol});
@@ -154,11 +155,11 @@ class BasicForm extends React.Component {
         if (nextProps.status && nextProps.status === 'success') {
             this.props.submitProcess.status = true
             if (this.props.callback) {
-                if(this.props.callback(nextProps.responseData)&&this.props.submitedRouteUrl){
+                if (this.props.callback(nextProps.responseData) && this.props.submitedRouteUrl) {
                     ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
                 }
-            }else{
-                if(this.props.submitedRouteUrl){
+            } else {
+                if (this.props.submitedRouteUrl) {
                     ReactRouter.browserHistory.push(this.props.submitedRouteUrl);
                 }
             }
@@ -186,12 +187,20 @@ class BasicForm extends React.Component {
         }
     }
 
+    handleUpdate(args) {
+        if (!this.props.submitProcess.status) {
+            this.props.submitProcess.status = true
+            this.forceUpdate();
+            this.props.updateFormDispatch(args);
+        }
+    }
+
     generateFormElement(id, rule, name) {
         var changeFun = null;
         var changeArgs = null;
         if (rule.updatable) {
             //可更新
-            changeFun = this.props.updateFormDispatch;
+            changeFun = this.handleUpdate.bind(this);
             changeArgs = {
                 rule: this.props.rule,
                 formKey: this.props.symbol,
@@ -352,7 +361,7 @@ class InlineForm extends BasicForm {
     constructor(props) {
         super(props);
         this.formType = 'inlineForm'
-        
+
     }
 
     render() {

@@ -241,13 +241,14 @@ function validateInternal(itemData, validateRules, required) {
         if (VALIDATE_RULE[validateRule.name] && !validateRule.validateRegex) {
             validateRule.validateRegex = VALIDATE_RULE[validateRule.name].defaultRegex;
         }
+        var regExp = validateRule.validateRegex;
         if (typeof validateRule.validateRegex === 'string') {
-            validateRule.validateRegex = new RegExp(validateRule.validateRegex);
+            regExp = new RegExp(validateRule.validateRegex);
         }
         if (VALIDATE_RULE[validateRule.name] && !validateRule.errorMsg) {
             validateRule.errorMsg = VALIDATE_RULE[validateRule.name].defaultErrorMsg;
         }
-        if (!validateRule.validateRegex.test(tmpData)) {
+        if (!regExp.test(tmpData)) {
             return {
                 validated: false,
                 errorMsg: validateRule.errorMsg
