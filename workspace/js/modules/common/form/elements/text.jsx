@@ -16,7 +16,16 @@ export default class Text extends React.Component {
             }
             this.props.data[this.props.name][this.props.id] = {files: e.target.files, value: e.target.value};
         } else {
-            var item = this.props.rule.dataType && this.props.rule.dataType == "number" && !isNaN(e.target.value) ? Number(e.target.value) : e.target.value
+            var item = e.target.value;
+            if(this.props.rule.dataType ){
+                if(this.props.rule.dataType == "number" ){
+                    if(!isNaN(item) ){
+                        item =  Number(item)
+                    }
+                }else if(this.props.rule.dataType == "boolean" ){
+                    item =  Boolean(item)
+                }
+            }
             this.props.data[this.props.name] = item;
         }
         if (this.props.rule.validated != undefined) {

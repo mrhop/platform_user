@@ -18,7 +18,16 @@ export default class Checkbox extends React.Component {
 
     onChange(e) {
         let value = this.props.data[this.props.name]
-        var item = this.props.rule.dataType && this.props.rule.dataType == "number" && !isNaN(e.target.value) ? Number(e.target.value) : e.target.value
+        var item = e.target.value;
+        if(this.props.rule.dataType ){
+            if(this.props.rule.dataType == "number" ){
+                if(!isNaN(item) ){
+                    item =  Number(item)
+                }
+            }else if(this.props.rule.dataType == "boolean" ){
+                item =  Boolean(item)
+            }
+        }
         if (e.target.checked) {
             if (value) {
                 value.push(item)
