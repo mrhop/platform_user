@@ -37,11 +37,19 @@ module.exports = {
         userpersonalinfo: baseUrl + 'user/personal/info',
         userpersonalupdate: baseUrl + 'user/personal/update',
         //dashboardleftmenu: '/demoData/dashboardFramework/leftmenu.json'
+        //client
         clients: baseUrl + 'client/list',
         clientdelete: baseUrl + 'client/delete',
         clientupdate: baseUrl + 'client/update',
         clientinfo: baseUrl + 'client/info',
         clientsave: baseUrl + 'client/save',
-        clientadd: baseUrl + 'client/add'
+        clientadd: baseUrl + 'client/add',
+        //module role
+        moduleroles: baseUrl + 'modulerole/list',
+        moduleroledelete: baseUrl + 'modulerole/delete',
+        moduleroleupdate: baseUrl + 'modulerole/update',
+        moduleroleinfo: baseUrl + 'modulerole/info',
+        modulerolesave: baseUrl + 'modulerole/save',
+        moduleroleadd: baseUrl + 'modulerole/add'
     }
 }

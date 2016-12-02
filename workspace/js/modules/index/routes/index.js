@@ -13,6 +13,9 @@ export default [
         <ReactRouter.Route path={baseUrl+"client/list.html"} component={Index.clients}/>
         <ReactRouter.Route path={baseUrl+"client/info.html"} component={Index.clientUpdate}/>
         <ReactRouter.Route path={baseUrl+"client/add.html"} component={Index.clientAdd}/>
+        <ReactRouter.Route path={baseUrl+"modulerole/list.html"} component={Index.moduleRoles}/>
+        <ReactRouter.Route path={baseUrl+"modulerole/info.html"} component={Index.moduleRoleUpdate}/>
+        <ReactRouter.Route path={baseUrl+"modulerole/add.html"} component={Index.moduleRoleAdd}/>
         <ReactRouter.Route path="table" component={Index.table}/>
         <ReactRouter.Route path="chart" component={Index.chart}/>
         <ReactRouter.Route path="form" component={Index.form}/>
