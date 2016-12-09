@@ -50,6 +50,14 @@ module.exports = {
         moduleroleupdate: baseUrl + 'modulerole/update',
         moduleroleinfo: baseUrl + 'modulerole/info',
         modulerolesave: baseUrl + 'modulerole/save',
-        moduleroleadd: baseUrl + 'modulerole/add'
+        moduleroleadd: baseUrl + 'modulerole/add',
+        //module
+        modules: baseUrl + 'module/list',
+        moduledelete: baseUrl + 'module/delete',
+        moduleupdate: baseUrl + 'module/update',
+        moduleinfo: baseUrl + 'module/info',
+        modulesave: baseUrl + 'module/save',
+        moduleadd: baseUrl + 'module/add',
+        moduleaddoptionupdate: baseUrl + 'module/add/rule/update'
     }
 }

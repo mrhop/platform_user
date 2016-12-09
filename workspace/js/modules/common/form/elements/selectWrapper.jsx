@@ -11,13 +11,18 @@ export default class SelectWrapper extends React.Component {
     }
 
     onChange(e) {
-        var item = this.props.rule.dataType && this.props.rule.dataType == "number" && !isNaN(e.value) ? Number(e.value) : e.value
+        var item = e == null ? null : (this.props.rule.dataType && this.props.rule.dataType == "number" && !isNaN(e.value) ? Number(e.value) : e.value)
         this.props.data[this.props.name] = e ? item : null;
         if (this.props.rule.validated != undefined) {
             this.props.rule.validated = true;
         }
         if (this.props.rule.errorMsg != undefined) {
             this.props.rule.errorMsg = null;
+        }
+
+        if (this.props.onchange) {
+            this.props.onchangeargs.updateData = item  ? item : null;
+            this.props.onchange(this.props.onchangeargs);
         }
 
         this.forceUpdate();
