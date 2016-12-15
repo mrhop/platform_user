@@ -37,7 +37,7 @@ class DashboardTop extends React.Component {
                 <div className="user-profile clearfix">
                     <div className="al-user-profile dropdown">
                         <a className="profile-toggle-link dropdown-toggle">
-                            <img src={require('../../../../../assets/images/profile/Nasta.png')}/>
+                            <img src={commonProperties['user.photo']}/>
                         </a>
                     </div>
                     <ul className="al-msg-center clearfix">
@@ -55,7 +55,7 @@ class DashboardTop extends React.Component {
                     </ul>
                 </div>
                 <div className="questions-section">{commonProperties['dashBoard.haveQuestions']}<a
-                    href="mailto:service@hhdd.com">service@hhdd.com</a>
+                    href="mailto:15309861499@163.com">15309861499@163.com</a>
                 </div>
             </div>
         );

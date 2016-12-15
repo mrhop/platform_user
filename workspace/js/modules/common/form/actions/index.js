@@ -225,7 +225,7 @@ function validateInternal(itemData, validateRules, required) {
             tmpData = ''
             for (var key in itemData) {
                 if (itemData[key].files) {
-                    tmpData += itemData[key].value
+                    tmpData += itemData[key].value.toLowerCase();
                 }
             }
         }
