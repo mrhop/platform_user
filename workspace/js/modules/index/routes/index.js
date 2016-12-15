@@ -19,10 +19,6 @@ export default [
         <ReactRouter.Route path={baseUrl+"module/list.html"} component={Index.modules}/>
         <ReactRouter.Route path={baseUrl+"module/info.html"} component={Index.moduleUpdate}/>
         <ReactRouter.Route path={baseUrl+"module/add.html"} component={Index.moduleAdd}/>
-        <ReactRouter.Route path="table" component={Index.table}/>
-        <ReactRouter.Route path="chart" component={Index.chart}/>
-        <ReactRouter.Route path="form" component={Index.form}/>
-        <ReactRouter.Route path="dragdrop" component={Index.dragDrop}/>
         <ReactRouter.Route path="/*" component={Index.error404}/>
     </ReactRouter.Route>
 ]

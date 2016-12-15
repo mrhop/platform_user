@@ -94,7 +94,7 @@ a.collapse-menu-link {
 
 .questions-section {
   position: absolute;
-  right: 200px;
+  right: 100px;
   top: 0;
   height: 66px;
   line-height: 66px;
@@ -107,10 +107,10 @@ a.collapse-menu-link {
 
 .user-profile {
   float: right;
-  min-width: 170px;
+  min-width: 70px;
   margin-top: 10px;
   @media (max-width: $screen-xs-max) {
-    min-width: 136px;
+    min-width: 70px;
   }
   a {
     display: block;
